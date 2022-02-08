@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/ListManagement/.vs/ListManagement
+/ListManagement/ListManagement/obj
+/ListManagement/ListManagement/bin/Debug/net6.0
