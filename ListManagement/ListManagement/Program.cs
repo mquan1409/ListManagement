@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ListManagement.models;
+using ListManagement.services;
 
 using Task = ListManagement.models.Task;
 
@@ -14,7 +16,7 @@ namespace ListManagement
     {
         static void Main(string[] args)
         {
-            var TaskList = new List<Task>();
+            var itemService = ItemService.Current;
             Console.WriteLine("Welcome to the List Management App\n\n");
             var input = 0;
             do
@@ -32,17 +34,17 @@ namespace ListManagement
                     input = 0;
                 }
                 if (input == 1)
-                    CreateTask(TaskList);
+                    CreateTask(itemService);
                 else if (input == 2)
-                    DeleteTask(TaskList);
+                    DeleteTask(itemService);
                 else if (input == 3)
-                    EditTask(TaskList);
+                    EditTask(itemService);
                 else if (input == 4)
-                    CompleteTask(TaskList);
+                    CompleteTask(itemService);
                 else if (input == 5)
-                    ListNotCompleteTasks(TaskList);
+                    ListNotCompleteTasks(itemService);
                 else if (input == 6)
-                    ListAllTasks(TaskList);
+                    ListAllTasks(itemService);
                 else if (input == 7)
                     Console.WriteLine("Thank you for using the List Management App!");
 
@@ -66,7 +68,7 @@ namespace ListManagement
             Console.Write("\nYour menu option (Please enter number 1 -> 7): ");
         }
 
-        static void CreateTask(List<Task> TaskList)
+        static void CreateTask(ItemService itemService)
         {
             var task = new Task();
             Console.Write("Enter Task Name: ");
@@ -79,23 +81,23 @@ namespace ListManagement
             task.Description = description;
             task.Deadline = deadline;
             task.isCompleted = false;
-            TaskList.Add(task);
+            itemService.Add(task);
             Console.WriteLine("\nTask Created Successfully!");
             Console.WriteLine("---Press any key to continue---");
             Console.ReadLine();
         }
 
-        static void DeleteTask(List<Task> TaskList)
+        static void DeleteTask(ItemService itemService)
         {
             Console.Write("Enter the name of the task you want to delete: ");
             var name_delete = Console.ReadLine();
             var task_found = false;
-            for(int i = 0; i < TaskList.Count; i++)
+            for(int i = 0; i < itemService.Items.Count; i++)
             {
-                if(TaskList[i].Name == name_delete)
+                if(itemService.Items[i].Name == name_delete)
                 {
-                    Console.WriteLine("\nTask " + TaskList[i].Name + " Deleted Successfully!\n");
-                    TaskList.RemoveAt(i);
+                    Console.WriteLine("\nTask " + itemService.Items[i].Name + " Deleted Successfully!\n");
+                    itemService.Items.RemoveAt(i);   // !!!
                     task_found = true;
                 }
             }
@@ -106,15 +108,16 @@ namespace ListManagement
             Console.ReadLine();
         }
 
-        static void EditTask(List<Task> TaskList)
+        static void EditTask(ItemService itemService)
         {
             Console.Write("Enter the name of the task you want to edit: ");
             var name_edit = Console.ReadLine();
             var task_found = false;
-            for(int i = 0; i < TaskList.Count; i++)
+            for(int i = 0; i < itemService.Items.Count; i++)
             {
-                if(TaskList[i].Name == name_edit)
+                if(itemService.Items[i].Name == name_edit)
                 {
+                    var task_edited = new Task();
                     task_found = true;
                     Console.Write("Enter new Name: ");
                     var name = Console.ReadLine();
@@ -122,9 +125,11 @@ namespace ListManagement
                     var description = Console.ReadLine();
                     Console.Write("Enter new Deadline: ");
                     var deadline = Console.ReadLine();
-                    TaskList[i].Name = name;
-                    TaskList[i].Description = description;
-                    TaskList[i].Deadline = deadline;
+                    task_edited.Name = name;
+                    task_edited.Description = description;
+                    task_edited.Deadline = deadline;
+                    task_edited.isCompleted = false;
+                    itemService.Replace(i, task_edited);
                     Console.WriteLine("\nTask Edited Successfully!\n");
 
                 }
@@ -136,18 +141,20 @@ namespace ListManagement
             Console.ReadLine();
         }
 
-        static void CompleteTask(List<Task> TaskList)
+        static void CompleteTask(ItemService itemService)
         {
             Console.Write("Enter the name of the task you want to complete: ");
             var name_complete = Console.ReadLine();
             var task_found = false;
-            for(int i = 0; i < TaskList.Count; i++)
+            for(int i = 0; i < itemService.Items.Count; i++)
             {
-                if (TaskList[i].Name == name_complete)
+                if (itemService.Items[i].Name == name_complete)
                 {
                     task_found = true;
-                    TaskList[i].isCompleted = true;
-                    Console.WriteLine("\nTask " + TaskList[i].Name + " has been marked Completed!\n");
+                    var task_completed = itemService.Items[i] as Task;
+                    if (task_completed != null)
+                        task_completed.isCompleted = true;
+                    Console.WriteLine("\nTask " + itemService.Items[i].Name + " has been marked Completed!\n");
                 }
             }
             if (!task_found)
@@ -158,22 +165,22 @@ namespace ListManagement
             Console.ReadLine();
         }
 
-        static void ListNotCompleteTasks(List<Task> TaskList)
+        static void ListNotCompleteTasks(ItemService itemService)
         {
             var not_complete_count = 0;
-            for(int i = 0; i < TaskList.Count; i++)
+            for(int i = 0; i < itemService.Items.Count; i++)
             {
-                if (TaskList[i].isCompleted != true)
+                if (!(itemService.Items[i] as Task)?.isCompleted ?? false)
                 {   
                     not_complete_count++;
                     Console.WriteLine("----------------------------");
-                    Console.WriteLine("Task Name: " + TaskList[i].Name);
-                    Console.WriteLine("Task Description: " + TaskList[i].Description);
-                    Console.WriteLine("Task Deadline: " + TaskList[i].Deadline);
+                    Console.WriteLine("Task Name: " + itemService.Items[i].Name);
+                    Console.WriteLine("Task Description: " + itemService.Items[i].Description);
+                    Console.WriteLine("Task Deadline: " + ((itemService.Items[i] as Task)?.Deadline ?? "No Deadline"));
                     Console.WriteLine();
                 }
             }
-            if (TaskList.Count == 0)
+            if (itemService.Items.Count == 0)
             {
                 Console.WriteLine("\nThere is no outstanding (not complete) task in the List\n");
             }
@@ -181,21 +188,26 @@ namespace ListManagement
             Console.ReadLine();
 
         }
-        static void ListAllTasks(List<Task> TaskList)
+        static void ListAllTasks(ItemService itemService)
         {
-            TaskList.ForEach(task => {
-                Console.WriteLine("----------------------------");
-                Console.WriteLine("Task Name: " + task.Name);
-                Console.WriteLine("Task Description: " + task.Description);
-                Console.WriteLine("Task Deadline: " + task.Deadline);
-                Console.WriteLine();
+            itemService.Items.ForEach(task => {
+                PrintItem(task);
             });
-            if(TaskList.Count == 0)
+            if(itemService.Items.Count == 0)
             {
                 Console.WriteLine("\nThere is no task in the List\n");
             }
             Console.WriteLine("---Press any key to continue---");
             Console.ReadLine();
+        }
+
+        static void PrintItem(Item task)
+        {
+            Console.WriteLine("----------------------------");
+            Console.WriteLine("Task Name: " + task.Name);
+            Console.WriteLine("Task Description: " + task.Description);
+            Console.WriteLine("Task Deadline: " + ((task as Task)?.Deadline ?? "No Deadline"));
+            Console.WriteLine();
         }
     }
 }
