@@ -9,5 +9,12 @@ namespace Library.ListManagement.models
 {
     public class Appointment : Item
     {
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+        public List<string>? Attendess { get; }
+        public Appointment()
+        {
+            Attendess = new List<string>();
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Library.ListManagement.models;
 using ListManagement.models;
 using ListManagement.services;
 
@@ -14,6 +15,7 @@ namespace ListManagement
 {
     public class Program
     {
+        
         static void Main(string[] args)
         {
             var itemService = ItemService.Current;
@@ -47,6 +49,10 @@ namespace ListManagement
                     ListAllTasks(itemService);
                 else if (input == 7)
                     Console.WriteLine("Thank you for using the List Management App!");
+                else if(input == 8)
+                {
+                    itemService.Save();
+                }
 
             }
             while (input != 7);
@@ -70,21 +76,39 @@ namespace ListManagement
 
         static void CreateTask(ItemService itemService)
         {
-            var task = new Task();
-            Console.Write("Enter Task Name: ");
-            var name = Console.ReadLine();
-            Console.Write("Enter Task Description: ");
-            var description = Console.ReadLine();
-            Console.Write("Enter Task Deadline: ");
-            var deadline = Console.ReadLine();
-            task.Name = name;
-            task.Description = description;
-            task.Deadline = deadline;
-            task.isCompleted = false;
-            itemService.Add(task);
-            Console.WriteLine("\nTask Created Successfully!");
-            Console.WriteLine("---Press any key to continue---");
-            Console.ReadLine();
+            Console.WriteLine("Do you want to create (T)ask or (A)ppointment? ");
+            var item_type = Console.ReadLine();
+            if (item_type == "T")
+            {
+                var task = new Task();
+                Console.Write("Enter Task Name: ");
+                var name = Console.ReadLine();
+                Console.Write("Enter Task Description: ");
+                var description = Console.ReadLine();
+                Console.Write("Enter Task Deadline: ");
+                var deadline = Console.ReadLine();
+                task.Name = name;
+                task.Description = description;
+                task.Deadline = deadline;
+                task.isCompleted = false;
+                itemService.Add(task);
+                Console.WriteLine("\nTask Created Successfully!");
+                Console.WriteLine("---Press any key to continue---");
+                Console.ReadLine();
+            }
+            else if(item_type == "A")
+            {
+                var appointment = new Appointment();
+                Console.Write("Enter Appointment Name: ");
+                appointment.Name = Console.ReadLine();
+                Console.Write("Enter Appointment Description: ");
+                appointment.Description = Console.ReadLine();
+                Console.Write("Enter Start Date of the Appointment (mm/dd/yyyy): ");
+                appointment.Start = DateTime.Parse(Console.ReadLine());
+                Console.Write("Enter End Date of the Appointment (mm/dd/yyyy): ");
+                appointment.End = DateTime.Parse(Console.ReadLine());
+                itemService.Add(appointment);
+            }
         }
 
         static void DeleteTask(ItemService itemService)
@@ -221,13 +245,29 @@ namespace ListManagement
             Console.ReadLine();
         }
 
-        static void PrintItem(Item task)
+        static void PrintItem(Item item)
         {
-            Console.WriteLine("----------------------------");
-            Console.WriteLine("Task Name: " + task.Name);
-            Console.WriteLine("Task Description: " + task.Description);
-            Console.WriteLine("Task Deadline: " + ((task as Task)?.Deadline ?? "No Deadline"));
-            Console.WriteLine();
+            if(item.Name == "Next")
+                Console.WriteLine("\nClick \'N\' to go to next page.");
+            else if(item.Name == "Previous")
+                Console.WriteLine("\nClick \'P\' to go to previous page.");
+            else
+            {
+                Console.WriteLine("----------------------------");
+                Console.WriteLine("Task Name: " + item.Name);
+                Console.WriteLine("Task Description: " + item.Description);
+                if(item is Task)
+                {
+                    Console.WriteLine("Task Deadline: " + ((item as Task)?.Deadline ?? "No Deadline"));
+                    Console.WriteLine();
+                }
+                else if(item is Appointment)
+                {
+                    Console.WriteLine("Appointment Start: " + (item as Appointment)?.Start.ToString("d") ?? "No Start Date");
+                    Console.WriteLine("Appointment End: " + (item as Appointment)?.End.ToString("d") ?? "No Start Date");
+                }
+            }
+
         }
     }
 }
