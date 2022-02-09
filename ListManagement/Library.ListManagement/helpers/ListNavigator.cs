@@ -44,7 +44,7 @@ namespace Library.ListManagement.helpers
             this.currentPage = 1;
             state = list;
         }
-        public Dictionary<int, T> GoForward()
+        public Dictionary<object, T> GoForward()
         {
             if (currentPage + 1 > lastPage)
             {
@@ -53,7 +53,7 @@ namespace Library.ListManagement.helpers
             currentPage++;
             return GetWindow();
         }
-        public Dictionary<int, T> GoBackward()
+        public Dictionary<object, T> GoBackward()
         {
             if (currentPage - 1 <= 0)
             {
@@ -62,7 +62,7 @@ namespace Library.ListManagement.helpers
             currentPage--;
             return GetWindow();
         }
-        public Dictionary<int, T> GoToPage(int page)
+        public Dictionary<object, T> GoToPage(int page)
         {
             if (page <= 0 || page > lastPage)
             {
@@ -71,23 +71,23 @@ namespace Library.ListManagement.helpers
             currentPage = page;
             return GetWindow();
         }
-        public Dictionary<int, T> GetCurrentPage()
+        public Dictionary<object, T> GetCurrentPage()
         {
             return GoToPage(currentPage);
         }
-        public Dictionary<int, T> GoToFirstPage()
+        public Dictionary<object, T> GoToFirstPage()
         {
             currentPage = 1;
             return GetWindow();
         }
-        public Dictionary<int, T> GoToLastPage()
+        public Dictionary<object, T> GoToLastPage()
         {
             currentPage = lastPage;
             return GetWindow();
         }
-        private Dictionary<int, T> GetWindow()
+        private Dictionary<object, T> GetWindow()
         {//(currentPage*pageSize) + pageSize
-            var window = new Dictionary<int, T>();
+            var window = new Dictionary<object, T>();
             for (int i = (currentPage - 1) * pageSize; i < (currentPage - 1) * pageSize + pageSize && i < state.Count; i++)
             {
                 window.Add(i + 1, state[i]);

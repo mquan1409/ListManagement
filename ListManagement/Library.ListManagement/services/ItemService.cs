@@ -23,6 +23,28 @@ namespace ListManagement.services
                 return instance; 
             } 
         }
+        public Dictionary<object, Item> GetPage()
+        {
+            var page = itemNav.GetCurrentPage();
+            if (itemNav.HasNextPage)
+            {
+                page.Add("N", new Item { Name = "Next" });
+            }
+            if (itemNav.HasPreviousPage)
+            {
+                page.Add("P", new Item { Name = "Previous" });
+            }
+            return page;
+        }
+        public Dictionary<object, Item> NextPage()
+        {
+            return itemNav.GoForward();
+        }
+
+        public Dictionary<object, Item> PreviousPage()
+        {
+            return itemNav.GoBackward();
+        }
 
         private ItemService()
         {

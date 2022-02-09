@@ -190,9 +190,29 @@ namespace ListManagement
         }
         static void ListAllTasks(ItemService itemService)
         {
-            itemService.Items.ForEach(task => {
-                PrintItem(task);
-            });
+            var user_selection = String.Empty;
+            while (user_selection != "E")
+            {
+                foreach(var item in itemService.GetPage())
+                {
+                    PrintItem(item.Value);
+                }
+
+                user_selection = Console.ReadLine();
+
+                if(user_selection == "N")
+                {
+                    itemService.NextPage();
+                }
+                if(user_selection == "P")
+                {
+                    itemService.PreviousPage();
+                }
+
+            }
+            //itemService.Items.ForEach(task => {
+            //    PrintItem(task);
+            //});
             if(itemService.Items.Count == 0)
             {
                 Console.WriteLine("\nThere is no task in the List\n");
