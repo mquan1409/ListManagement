@@ -36,26 +36,26 @@ namespace ListManagement
                     input = 0;
                 }
                 if (input == 1)
-                    CreateTask(itemService);
+                    CreateItem(itemService);
                 else if (input == 2)
-                    DeleteTask(itemService);
+                    DeleteItem(itemService);
                 else if (input == 3)
-                    EditTask(itemService);
+                    EditItem(itemService);
                 else if (input == 4)
                     CompleteTask(itemService);
                 else if (input == 5)
                     ListNotCompleteTasks(itemService);
                 else if (input == 6)
                     ListAllTasks(itemService);
-                else if (input == 7)
-                    Console.WriteLine("Thank you for using the List Management App!");
-                else if(input == 8)
+                else if(input == 7)
                 {
                     itemService.Save();
                 }
+                else if (input == 8)
+                    Console.WriteLine("Thank you for using the List Management App!");
 
             }
-            while (input != 7);
+            while (input != 8);
                 
             Console.ReadLine();
             
@@ -64,21 +64,22 @@ namespace ListManagement
         static void PrintMenu()
         {
             Console.WriteLine("\nChoose one of the following options:\n");
-            Console.WriteLine("1. Create a new task");
-            Console.WriteLine("2. Delete an existing task");
-            Console.WriteLine("3. Edit an existing task");
+            Console.WriteLine("1. Create item");
+            Console.WriteLine("2. Delete item(s)");
+            Console.WriteLine("3. Edit an existing item");
             Console.WriteLine("4. Complete a task");
             Console.WriteLine("5. List all outstanding (not complete) tasks");
-            Console.WriteLine("6. List all tasks");
-            Console.WriteLine("7. Exit");
-            Console.Write("\nYour menu option (Please enter number 1 -> 7): ");
+            Console.WriteLine("6. List all items");
+            Console.WriteLine("7. Save data");
+            Console.WriteLine("8. Exit");
+            Console.Write("\nYour menu option (Please enter number 1 -> 8): ");
         }
 
-        static void CreateTask(ItemService itemService)
+        static void CreateItem(ItemService itemService)
         {
-            Console.WriteLine("Do you want to create (T)ask or (A)ppointment? ");
+            Console.WriteLine("Do you want to create (t)ask or (a)ppointment? ");
             var item_type = Console.ReadLine();
-            if (item_type == "T")
+            if (item_type == "t")
             {
                 var task = new Task();
                 Console.Write("Enter Task Name: ");
@@ -96,7 +97,7 @@ namespace ListManagement
                 Console.WriteLine("---Press any key to continue---");
                 Console.ReadLine();
             }
-            else if(item_type == "A")
+            else if(item_type == "a")
             {
                 var appointment = new Appointment();
                 Console.Write("Enter Appointment Name: ");
@@ -107,32 +108,51 @@ namespace ListManagement
                 appointment.Start = DateTime.Parse(Console.ReadLine());
                 Console.Write("Enter End Date of the Appointment (mm/dd/yyyy): ");
                 appointment.End = DateTime.Parse(Console.ReadLine());
+                Console.WriteLine("Enter Attendees of the Appointment (Type names seperated by comma): ");
+                foreach(var name in Console.ReadLine().Split(", "))
+                {
+                    appointment.Attendess.Add(name);
+                };
                 itemService.Add(appointment);
             }
         }
 
-        static void DeleteTask(ItemService itemService)
+        static void DeleteItem(ItemService itemService)
         {
-            Console.Write("Enter the name of the task you want to delete: ");
-            var name_delete = Console.ReadLine();
-            var task_found = false;
-            for(int i = 0; i < itemService.Items.Count; i++)
+            Console.Write("Do you want to delete (a)ll items or (o)ne item? ");
+            var option = Console.ReadLine();
+            if (option == "a")
             {
-                if(itemService.Items[i].Name == name_delete)
+                for(int i = 0; i < itemService.Items.Count; i++)
                 {
-                    Console.WriteLine("\nTask " + itemService.Items[i].Name + " Deleted Successfully!\n");
-                    itemService.Items.RemoveAt(i);   // !!!
-                    task_found = true;
+                    itemService.Items.RemoveAt(i);
                 }
+                Console.WriteLine("Delete all items successfully!");
             }
-            if (!task_found)
-                Console.WriteLine("\nTask Not Found!\n");
+            else if (option == "o")
+            {
+                Console.Write("Enter the name of the task you want to delete: ");
+                var name_delete = Console.ReadLine();
+                var task_found = false;
+                for (int i = 0; i < itemService.Items.Count; i++)
+                {
+                    if (itemService.Items[i].Name == name_delete)
+                    {
+                        Console.WriteLine("\nTask " + itemService.Items[i].Name + " Deleted Successfully!\n");
+                        itemService.Items.RemoveAt(i);   // !!!
+                        task_found = true;
+                    }
+                }
+                if (!task_found)
+                    Console.WriteLine("\nTask Not Found!\n");
+
+            }
 
             Console.WriteLine("---Press any key to continue---");
             Console.ReadLine();
         }
 
-        static void EditTask(ItemService itemService)
+        static void EditItem(ItemService itemService)
         {
             Console.Write("Enter the name of the task you want to edit: ");
             var name_edit = Console.ReadLine();
@@ -215,20 +235,27 @@ namespace ListManagement
         static void ListAllTasks(ItemService itemService)
         {
             var user_selection = String.Empty;
-            while (user_selection != "E")
+            while (user_selection.ToUpper() != "E")
             {
-                foreach(var item in itemService.GetPage())
+                try
                 {
-                    PrintItem(item.Value);
+                    foreach (var item in itemService.GetPage("all"))
+                    {
+                        PrintItem(item.Value);
+                    }
                 }
-
+                catch (Exception ex)
+                {
+                    if (ex.Message == "Cannot navigate to a page outside of the bounds of the list!")
+                        break;
+                }
                 user_selection = Console.ReadLine();
 
-                if(user_selection == "N")
+                if(user_selection.ToUpper() == "N")
                 {
                     itemService.NextPage();
                 }
-                if(user_selection == "P")
+                if(user_selection.ToUpper() == "P")
                 {
                     itemService.PreviousPage();
                 }
@@ -251,6 +278,8 @@ namespace ListManagement
                 Console.WriteLine("\nClick \'N\' to go to next page.");
             else if(item.Name == "Previous")
                 Console.WriteLine("\nClick \'P\' to go to previous page.");
+            else if(item.Name == "Exit")
+                Console.WriteLine("\nClick \'E\' to exit.");
             else
             {
                 Console.WriteLine("----------------------------");
@@ -267,7 +296,6 @@ namespace ListManagement
                     Console.WriteLine("Appointment End: " + (item as Appointment)?.End.ToString("d") ?? "No Start Date");
                 }
             }
-
         }
     }
 }

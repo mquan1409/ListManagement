@@ -11,7 +11,7 @@ namespace Library.ListManagement.models
     {
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
-        public List<string>? Attendess { get; }
+        public List<string>? Attendess { get; set;  }
         public Appointment()
         {
             Attendess = new List<string>();

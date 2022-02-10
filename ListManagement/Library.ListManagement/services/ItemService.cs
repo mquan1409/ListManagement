@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Task = ListManagement.models.Task;
+
 namespace ListManagement.services
 {
     public class ItemService
@@ -27,8 +29,13 @@ namespace ListManagement.services
                 return instance; 
             } 
         }
-        public Dictionary<object, Item> GetPage()
+        public Dictionary<object, Item> GetPage(string type)
         {
+            //ListNavigator<Item> itemNav = new ListNavigator<Item>(Items, 2);
+            //if (type == "all")
+            //    itemNav = new ListNavigator<Item>(Items, 2);
+            //if (type == "incomplete")
+            //    itemNav = new ListNavigator<Item>(IncompleteItems, 2);
             var page = itemNav.GetCurrentPage();
             if (itemNav.HasNextPage)
             {
@@ -38,6 +45,7 @@ namespace ListManagement.services
             {
                 page.Add("P", new Item { Name = "Previous" });
             }
+            page.Add("E", new Item { Name = "Exit" });
             return page;
         }
         public Dictionary<object, Item> NextPage()
@@ -75,6 +83,16 @@ namespace ListManagement.services
             if (File.Exists(persistence_path))
                 File.Delete(persistence_path);
             File.WriteAllText(persistence_path, list_json);
+        }
+        public List<Item> IncompleteItems
+        {
+            get
+            {
+                var incomplete_items = new List<Item>();
+                foreach (var item in Items.Where(i => !((i as Task)?.isCompleted) ?? false)) 
+                    incomplete_items.Add(item);
+                return incomplete_items;
+            }
         }
         public void Add(Item item_added)
         {
