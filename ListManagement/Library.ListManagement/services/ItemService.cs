@@ -14,7 +14,11 @@ namespace ListManagement.services
     public class ItemService
     {
         private List<Item> items;
-        private ListNavigator<Item> itemNav;
+        private List<Item> incomplete_items;
+        private List<Item> filtered_items;
+        private ListNavigator<Item> item_nav;
+        private ListNavigator<Item> incomplete_item_nav;
+        private ListNavigator<Item> filtered_item_nav;
         private static ItemService? instance;
         private string persistence_path;
         private JsonSerializerSettings serializer_settings
@@ -31,36 +35,49 @@ namespace ListManagement.services
         }
         public Dictionary<object, Item> GetPage(string type)
         {
-            //ListNavigator<Item> itemNav = new ListNavigator<Item>(Items, 2);
-            //if (type == "all")
-            //    itemNav = new ListNavigator<Item>(Items, 2);
-            //if (type == "incomplete")
-            //    itemNav = new ListNavigator<Item>(IncompleteItems, 2);
-            var page = itemNav.GetCurrentPage();
-            if (itemNav.HasNextPage)
+            ListNavigator<Item> nav = new ListNavigator<Item>(Items, 2);
+            if (type == "all")
+                nav = item_nav;
+            if (type == "incomplete")
+                nav = incomplete_item_nav;
+            var page = nav.GetCurrentPage();
+            if (nav.HasNextPage)
             {
                 page.Add("N", new Item { Name = "Next" });
             }
-            if (itemNav.HasPreviousPage)
+            if (nav.HasPreviousPage)
             {
                 page.Add("P", new Item { Name = "Previous" });
             }
             page.Add("E", new Item { Name = "Exit" });
             return page;
         }
-        public Dictionary<object, Item> NextPage()
+        public Dictionary<object, Item> NextPage(string type)
         {
-            return itemNav.GoForward();
+            ListNavigator<Item> nav = new ListNavigator<Item>(Items, 2);
+            if (type == "all")
+                nav = item_nav;
+            if (type == "incomplete")
+                nav = incomplete_item_nav;
+            return nav.GoForward();
         }
 
-        public Dictionary<object, Item> PreviousPage()
+        public Dictionary<object, Item> PreviousPage(string type)
         {
-            return itemNav.GoBackward();
+            ListNavigator<Item> nav = new ListNavigator<Item>(Items, 2);
+            if (type == "all")
+                nav = item_nav;
+            if (type == "incomplete")
+                nav = incomplete_item_nav;
+            return nav.GoBackward();
         }
 
         private ItemService()
         {
             items = new List<Item>();
+            incomplete_items = new List<Item>();
+            filtered_items = new List<Item>();
+            
             persistence_path = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\SaveData.json";
             if (File.Exists(persistence_path))
             {
@@ -74,7 +91,9 @@ namespace ListManagement.services
                     items = new List<Item>();
                 }
             }
-            itemNav = new ListNavigator<Item>(Items, 2);
+            item_nav = new ListNavigator<Item>(Items, 2);
+            incomplete_item_nav = new ListNavigator<Item>(incomplete_items, 2);
+            filtered_item_nav = new ListNavigator<Item>(filtered_items, 2);
         }
         public void Save()
         {
@@ -84,15 +103,37 @@ namespace ListManagement.services
                 File.Delete(persistence_path);
             File.WriteAllText(persistence_path, list_json);
         }
-        public List<Item> IncompleteItems
+        public void UpdateIncompleteItemsList()  // have to make this function run right before print all incomplete tasks
         {
-            get
+            var incomplete_ienumerable = Items.Where(i => !(((i as Task)?.isCompleted) ?? true));
+            //foreach(var item in incomplete_ienumerable)
+                //Console.WriteLine(item.Name);
+            incomplete_items.Clear();
+            //for (int i = 0; i < incomplete_items.Count; i++)
+              //  incomplete_items.RemoveAt(i);
+            //Console.WriteLine(incomplete_items.Count);
+            foreach (var item in incomplete_ienumerable) 
+                incomplete_items.Add(item);
+            //foreach(var item in incomplete_items)
+            //    Console.WriteLine(item.Name);
+        }
+        public List<Item> Search(string search_string)
+        {
+            filtered_items.Clear();
+            var filtered_items_ienumerable = Items.Where((i) =>
             {
-                var incomplete_items = new List<Item>();
-                foreach (var item in Items.Where(i => !((i as Task)?.isCompleted) ?? false)) 
-                    incomplete_items.Add(item);
-                return incomplete_items;
-            }
+                if (i.Name == search_string)
+                    return true;
+                else if (i.Description == search_string)
+                    return true;
+                else if ((i as Appointment)?.Attendees?.Contains(search_string) ?? false)
+                    return true;
+                else
+                    return false;
+            });
+            foreach(var item in filtered_items_ienumerable)
+                filtered_items.Add(item);
+            return filtered_items;
         }
         public void Add(Item item_added)
         {

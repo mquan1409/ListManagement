@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Library.ListManagement.models;
+using ListManagement.models;
 using ListManagement.models;
 using ListManagement.services;
 
@@ -47,15 +47,20 @@ namespace ListManagement
                     ListNotCompleteTasks(itemService);
                 else if (input == 6)
                     ListAllTasks(itemService);
-                else if(input == 7)
+                else if (input == 7)
+                    SearchItems(itemService);
+                else if (input == 8)
                 {
                     itemService.Save();
+                    Console.WriteLine("Data saved successfully!");
+                    Console.WriteLine("---Press any key to continue---");
+                    Console.ReadLine();
                 }
-                else if (input == 8)
+                else if (input == 9)
                     Console.WriteLine("Thank you for using the List Management App!");
 
             }
-            while (input != 8);
+            while (input != 9);
                 
             Console.ReadLine();
             
@@ -70,9 +75,10 @@ namespace ListManagement
             Console.WriteLine("4. Complete a task");
             Console.WriteLine("5. List all outstanding (not complete) tasks");
             Console.WriteLine("6. List all items");
-            Console.WriteLine("7. Save data");
-            Console.WriteLine("8. Exit");
-            Console.Write("\nYour menu option (Please enter number 1 -> 8): ");
+            Console.WriteLine("7. Search Items");
+            Console.WriteLine("8. Save data");
+            Console.WriteLine("9. Exit");
+            Console.Write("\nYour menu option (Please enter number 1 -> 9): ");
         }
 
         static void CreateItem(ItemService itemService)
@@ -111,7 +117,7 @@ namespace ListManagement
                 Console.WriteLine("Enter Attendees of the Appointment (Type names seperated by comma): ");
                 foreach(var name in Console.ReadLine().Split(", "))
                 {
-                    appointment.Attendess.Add(name);
+                    appointment.Attendees.Add(name);
                 };
                 itemService.Add(appointment);
             }
@@ -123,10 +129,11 @@ namespace ListManagement
             var option = Console.ReadLine();
             if (option == "a")
             {
-                for(int i = 0; i < itemService.Items.Count; i++)
-                {
-                    itemService.Items.RemoveAt(i);
-                }
+                itemService.Items.Clear();
+                //for (int i = 0; i < itemService.Items.Count; i++)
+                //{
+                //    itemService.Items.RemoveAt(i);
+                //}
                 Console.WriteLine("Delete all items successfully!");
             }
             else if (option == "o")
@@ -161,20 +168,42 @@ namespace ListManagement
             {
                 if(itemService.Items[i].Name == name_edit)
                 {
-                    var task_edited = new Task();
                     task_found = true;
-                    Console.Write("Enter new Name: ");
-                    var name = Console.ReadLine();
-                    Console.Write("Enter new Description: ");
-                    var description = Console.ReadLine();
-                    Console.Write("Enter new Deadline: ");
-                    var deadline = Console.ReadLine();
-                    task_edited.Name = name;
-                    task_edited.Description = description;
-                    task_edited.Deadline = deadline;
-                    task_edited.isCompleted = false;
-                    itemService.Replace(i, task_edited);
-                    Console.WriteLine("\nTask Edited Successfully!\n");
+                    if(itemService.Items[i] is Task)
+                    {
+                        var item_edited = new Task();
+                        Console.Write("Enter new Name: ");
+                        var name = Console.ReadLine();
+                        Console.Write("Enter new Description: ");
+                        var description = Console.ReadLine();
+                        Console.Write("Enter new Deadline: ");
+                        var deadline = Console.ReadLine();
+                        item_edited.Name = name;
+                        item_edited.Description = description;
+                        item_edited.Deadline = deadline;
+                        item_edited.isCompleted = false;
+                        itemService.Replace(i, item_edited);
+                        Console.WriteLine("\nTask Edited Successfully!\n");
+                    }
+                    if(itemService.Items[i] is Appointment)
+                    {
+                        var item_edited = new Appointment();
+                        Console.Write("Enter new Name: ");
+                        item_edited.Name = Console.ReadLine();
+                        Console.Write("Enter new Description: ");
+                        item_edited.Description = Console.ReadLine();
+                        Console.Write("Enter new Start Date of the Appointment (mm/dd/yyyy): ");
+                        item_edited.Start = DateTime.Parse(Console.ReadLine());
+                        Console.Write("Enter new End Date of the Appointment (mm/dd/yyyy): ");
+                        item_edited.End = DateTime.Parse(Console.ReadLine());
+                        Console.WriteLine("Enter new Attendees of the Appointment (Type names seperated by comma): ");
+                        foreach (var attendee in Console.ReadLine().Split(", "))
+                        {
+                            item_edited.Attendees.Add(attendee);
+                        };
+                        itemService.Replace(i, item_edited);
+                    }
+
 
                 }
             }
@@ -212,19 +241,50 @@ namespace ListManagement
         static void ListNotCompleteTasks(ItemService itemService)
         {
             var not_complete_count = 0;
-            for(int i = 0; i < itemService.Items.Count; i++)
+            //for(int i = 0; i < itemService.Items.Count; i++)
+            //{
+            //    if (!(itemService.Items[i] as Task)?.isCompleted ?? false)
+            //    {   
+            //        not_complete_count++;
+            //        Console.WriteLine("----------------------------");
+            //        Console.WriteLine("Task Name: " + itemService.Items[i].Name);
+            //        Console.WriteLine("Task Description: " + itemService.Items[i].Description);
+            //        Console.WriteLine("Task Deadline: " + ((itemService.Items[i] as Task)?.Deadline ?? "No Deadline"));
+            //        Console.WriteLine();
+            //    }
+            //}
+
+            itemService.UpdateIncompleteItemsList();
+
+            var user_selection = String.Empty;
+            while (user_selection.ToUpper() != "E")
             {
-                if (!(itemService.Items[i] as Task)?.isCompleted ?? false)
-                {   
-                    not_complete_count++;
-                    Console.WriteLine("----------------------------");
-                    Console.WriteLine("Task Name: " + itemService.Items[i].Name);
-                    Console.WriteLine("Task Description: " + itemService.Items[i].Description);
-                    Console.WriteLine("Task Deadline: " + ((itemService.Items[i] as Task)?.Deadline ?? "No Deadline"));
-                    Console.WriteLine();
+                try
+                {
+                    foreach (var item in itemService.GetPage("incomplete"))
+                    {
+                        PrintItem(item.Value);
+                        not_complete_count++;
+                    }
                 }
+                catch (Exception ex)
+                {
+                    if (ex.Message == "Cannot navigate to a page outside of the bounds of the list!")
+                        break;
+                }
+                user_selection = Console.ReadLine();
+
+                if (user_selection.ToUpper() == "N")
+                {
+                    itemService.NextPage("incomplete");
+                }
+                if (user_selection.ToUpper() == "P")
+                {
+                    itemService.PreviousPage("incomplete");
+                }
+
             }
-            if (itemService.Items.Count == 0)
+            if (not_complete_count == 0)
             {
                 Console.WriteLine("\nThere is no outstanding (not complete) task in the List\n");
             }
@@ -253,11 +313,11 @@ namespace ListManagement
 
                 if(user_selection.ToUpper() == "N")
                 {
-                    itemService.NextPage();
+                    itemService.NextPage("all");
                 }
                 if(user_selection.ToUpper() == "P")
                 {
-                    itemService.PreviousPage();
+                    itemService.PreviousPage("all");
                 }
 
             }
@@ -268,6 +328,15 @@ namespace ListManagement
             {
                 Console.WriteLine("\nThere is no task in the List\n");
             }
+            Console.WriteLine("---Press any key to continue---");
+            Console.ReadLine();
+        }
+        static void SearchItems(ItemService itemService)
+        {
+            Console.Write("Enter search string: ");
+            var filtered_items = itemService.Search(Console.ReadLine());
+            foreach (var item in filtered_items)
+                PrintItem(item);
             Console.WriteLine("---Press any key to continue---");
             Console.ReadLine();
         }
@@ -294,6 +363,16 @@ namespace ListManagement
                 {
                     Console.WriteLine("Appointment Start: " + (item as Appointment)?.Start.ToString("d") ?? "No Start Date");
                     Console.WriteLine("Appointment End: " + (item as Appointment)?.End.ToString("d") ?? "No Start Date");
+                    Console.Write("Attendees: ");
+                    var attendees = (item as Appointment)?.Attendees;
+                    if (attendees != null)
+                        for(int i = 0;i < attendees.Count; i++)
+                        {
+                            Console.Write(attendees[i]);
+                            if (i != (attendees.Count - 1))
+                                Console.Write(", ");
+                        }
+                    Console.WriteLine();
                 }
             }
         }
