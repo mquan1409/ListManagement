@@ -26,6 +26,13 @@ namespace ListManagement.services
 
         public List<Item> Items { get { return items; } }
 
+        public bool ShowComplete { get; set; }
+        public IEnumerable<Item> FilteredItems { 
+            get {
+                return items.Where(i => ((!ShowComplete && !(((i as Task)?.isCompleted) ?? true)) || ShowComplete));
+            } 
+        }
+
         public static ItemService Current { 
             get { 
                 if(instance == null)
@@ -33,43 +40,43 @@ namespace ListManagement.services
                 return instance; 
             } 
         }
-        public Dictionary<object, Item> GetPage(string type)
+        public Dictionary<object, Item> GetPage()
         {
-            ListNavigator<Item> nav = new ListNavigator<Item>(Items, 2);
-            if (type == "all")
-                nav = item_nav;
-            if (type == "incomplete")
-                nav = incomplete_item_nav;
-            var page = nav.GetCurrentPage();
-            if (nav.HasNextPage)
+            //ListNavigator<Item> nav = new ListNavigator<Item>(Items, 2);
+            //if (type == "all")
+            //    nav = item_nav;
+            //if (type == "incomplete")
+            //    nav = incomplete_item_nav;
+            var page = item_nav.GetCurrentPage();
+            if (item_nav.HasNextPage)
             {
                 page.Add("N", new Item { Name = "Next" });
             }
-            if (nav.HasPreviousPage)
+            if (item_nav.HasPreviousPage)
             {
                 page.Add("P", new Item { Name = "Previous" });
             }
             page.Add("E", new Item { Name = "Exit" });
             return page;
         }
-        public Dictionary<object, Item> NextPage(string type)
+        public Dictionary<object, Item> NextPage()
         {
-            ListNavigator<Item> nav = new ListNavigator<Item>(Items, 2);
-            if (type == "all")
-                nav = item_nav;
-            if (type == "incomplete")
-                nav = incomplete_item_nav;
-            return nav.GoForward();
+            //ListNavigator<Item> nav = new ListNavigator<Item>(Items, 2);
+            //if (type == "all")
+            //    nav = item_nav;
+            //if (type == "incomplete")
+            //    nav = incomplete_item_nav;
+            return item_nav.GoForward();
         }
 
-        public Dictionary<object, Item> PreviousPage(string type)
+        public Dictionary<object, Item> PreviousPage()
         {
-            ListNavigator<Item> nav = new ListNavigator<Item>(Items, 2);
-            if (type == "all")
-                nav = item_nav;
-            if (type == "incomplete")
-                nav = incomplete_item_nav;
-            return nav.GoBackward();
+            //ListNavigator<Item> nav = new ListNavigator<Item>(Items, 2);
+            //if (type == "all")
+            //    nav = item_nav;
+            //if (type == "incomplete")
+            //    nav = incomplete_item_nav;
+            return item_nav.GoBackward();
         }
 
         private ItemService()
@@ -77,6 +84,7 @@ namespace ListManagement.services
             items = new List<Item>();
             incomplete_items = new List<Item>();
             filtered_items = new List<Item>();
+            ShowComplete = true;
             
             persistence_path = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\SaveData.json";
             if (File.Exists(persistence_path))
@@ -91,9 +99,9 @@ namespace ListManagement.services
                     items = new List<Item>();
                 }
             }
-            item_nav = new ListNavigator<Item>(Items, 2);
-            incomplete_item_nav = new ListNavigator<Item>(incomplete_items, 2);
-            filtered_item_nav = new ListNavigator<Item>(filtered_items, 2);
+            item_nav = new ListNavigator<Item>(FilteredItems, 2);
+            //incomplete_item_nav = new ListNavigator<Item>(incomplete_items, 2);
+            //filtered_item_nav = new ListNavigator<Item>(filtered_items, 2);
         }
         public void Save()
         {

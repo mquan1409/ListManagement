@@ -9,7 +9,7 @@ namespace ListManagement.models
     public class Task : Item
     {      
         public string? Deadline { get; set; }
-        public Boolean? isCompleted { get; set; }
+        public bool isCompleted { get; set; }
 
     }
 }

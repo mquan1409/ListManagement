@@ -254,14 +254,14 @@ namespace ListManagement
             //    }
             //}
 
-            itemService.UpdateIncompleteItemsList();
+            itemService.ShowComplete = false;
 
             var user_selection = String.Empty;
             while (user_selection.ToUpper() != "E")
             {
                 try
                 {
-                    foreach (var item in itemService.GetPage("incomplete"))
+                    foreach (var item in itemService.GetPage())
                     {
                         PrintItem(item.Value);
                         not_complete_count++;
@@ -276,11 +276,11 @@ namespace ListManagement
 
                 if (user_selection.ToUpper() == "N")
                 {
-                    itemService.NextPage("incomplete");
+                    itemService.NextPage();
                 }
                 if (user_selection.ToUpper() == "P")
                 {
-                    itemService.PreviousPage("incomplete");
+                    itemService.PreviousPage();
                 }
 
             }
@@ -295,11 +295,12 @@ namespace ListManagement
         static void ListAllTasks(ItemService itemService)
         {
             var user_selection = String.Empty;
+            itemService.ShowComplete = true;
             while (user_selection.ToUpper() != "E")
             {
                 try
                 {
-                    foreach (var item in itemService.GetPage("all"))
+                    foreach (var item in itemService.GetPage())
                     {
                         PrintItem(item.Value);
                     }
@@ -313,11 +314,11 @@ namespace ListManagement
 
                 if(user_selection.ToUpper() == "N")
                 {
-                    itemService.NextPage("all");
+                    itemService.NextPage();
                 }
                 if(user_selection.ToUpper() == "P")
                 {
-                    itemService.PreviousPage("all");
+                    itemService.PreviousPage();
                 }
 
             }
