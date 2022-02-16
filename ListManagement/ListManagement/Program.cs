@@ -130,10 +130,6 @@ namespace ListManagement
             if (option == "a")
             {
                 itemService.Items.Clear();
-                //for (int i = 0; i < itemService.Items.Count; i++)
-                //{
-                //    itemService.Items.RemoveAt(i);
-                //}
                 Console.WriteLine("Delete all items successfully!");
             }
             else if (option == "o")
@@ -240,51 +236,9 @@ namespace ListManagement
 
         static void ListNotCompleteTasks(ItemService itemService)
         {
-            var not_complete_count = 0;
-            //for(int i = 0; i < itemService.Items.Count; i++)
-            //{
-            //    if (!(itemService.Items[i] as Task)?.isCompleted ?? false)
-            //    {   
-            //        not_complete_count++;
-            //        Console.WriteLine("----------------------------");
-            //        Console.WriteLine("Task Name: " + itemService.Items[i].Name);
-            //        Console.WriteLine("Task Description: " + itemService.Items[i].Description);
-            //        Console.WriteLine("Task Deadline: " + ((itemService.Items[i] as Task)?.Deadline ?? "No Deadline"));
-            //        Console.WriteLine();
-            //    }
-            //}
-
             itemService.ShowComplete = false;
-
-            var user_selection = String.Empty;
-            while (user_selection.ToUpper() != "E")
-            {
-                try
-                {
-                    foreach (var item in itemService.GetPage())
-                    {
-                        PrintItem(item.Value);
-                        not_complete_count++;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message == "Cannot navigate to a page outside of the bounds of the list!")
-                        break;
-                }
-                user_selection = Console.ReadLine();
-
-                if (user_selection.ToUpper() == "N")
-                {
-                    itemService.NextPage();
-                }
-                if (user_selection.ToUpper() == "P")
-                {
-                    itemService.PreviousPage();
-                }
-
-            }
-            if (not_complete_count == 0)
+            itemService.ShowQuery = false;
+            if (!StartPaging(itemService))
             {
                 Console.WriteLine("\nThere is no outstanding (not complete) task in the List\n");
             }
@@ -294,55 +248,33 @@ namespace ListManagement
         }
         static void ListAllTasks(ItemService itemService)
         {
-            var user_selection = String.Empty;
             itemService.ShowComplete = true;
-            while (user_selection.ToUpper() != "E")
-            {
-                try
-                {
-                    foreach (var item in itemService.GetPage())
-                    {
-                        PrintItem(item.Value);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message == "Cannot navigate to a page outside of the bounds of the list!")
-                        break;
-                }
-                user_selection = Console.ReadLine();
-
-                if(user_selection.ToUpper() == "N")
-                {
-                    itemService.NextPage();
-                }
-                if(user_selection.ToUpper() == "P")
-                {
-                    itemService.PreviousPage();
-                }
-
-            }
-            //itemService.Items.ForEach(task => {
-            //    PrintItem(task);
-            //});
-            if(itemService.Items.Count == 0)
+            if(!StartPaging(itemService))
             {
                 Console.WriteLine("\nThere is no task in the List\n");
             }
             Console.WriteLine("---Press any key to continue---");
             Console.ReadLine();
         }
-        static void SearchItems(ItemService itemService)
+        public static void SearchItems(ItemService itemService)
         {
             Console.Write("Enter search string: ");
-            var filtered_items = itemService.Search(Console.ReadLine());
-            foreach (var item in filtered_items)
-                PrintItem(item);
+            itemService.ShowQuery = true;
+            itemService.ShowComplete = true;
+            itemService.Query = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(itemService.Query) || string.IsNullOrEmpty(itemService.Query))
+                Console.WriteLine("\nThere is no query!\n");
+
+            else if (!StartPaging(itemService))
+            {
+                Console.WriteLine("\nThere is no task in the List\n");
+            }
+            itemService.Query = "";
             Console.WriteLine("---Press any key to continue---");
             Console.ReadLine();
         }
 
-        static void PrintItem(Item item)
+        private static void PrintItem(Item item)
         {
             if(item.Name == "Next")
                 Console.WriteLine("\nClick \'N\' to go to next page.");
@@ -376,6 +308,39 @@ namespace ListManagement
                     Console.WriteLine();
                 }
             }
+        }
+        private static bool StartPaging(ItemService itemService)
+        {
+            var user_selection = String.Empty;
+            while ((user_selection.ToUpper() != "E") && (itemService.FilteredItems.Count() != 0))
+            {
+                try
+                {
+                    foreach (var item in itemService.GetPage())
+                    {
+                        PrintItem(item.Value);
+                    }
+                    user_selection = Console.ReadLine();
+
+                    if (user_selection.ToUpper() == "N")
+                    {
+                        itemService.NextPage();
+                    }
+                    if (user_selection.ToUpper() == "P")
+                    {
+                        itemService.PreviousPage();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    user_selection = "E";
+                }
+                
+            }
+            if (itemService.FilteredItems.Count() == 0)
+                return false;
+            return true;
         }
     }
 }
