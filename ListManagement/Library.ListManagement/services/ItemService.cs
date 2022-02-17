@@ -78,6 +78,10 @@ namespace ListManagement.services
             page.Add("E", new Item { Name = "Exit" });
             return page;
         }
+        public Dictionary<object, Item> FirstPage()
+        {
+            return item_nav.GoToFirstPage();
+        }
         public Dictionary<object, Item> NextPage()
         {
             return item_nav.GoForward();
@@ -107,7 +111,7 @@ namespace ListManagement.services
                     items = new List<Item>();
                 }
             }
-            item_nav = new ListNavigator<Item>(FilteredItems, 2);
+            item_nav = new ListNavigator<Item>(FilteredItems, 5);
         }
         public void Save()
         {

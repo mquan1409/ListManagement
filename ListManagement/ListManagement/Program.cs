@@ -335,6 +335,7 @@ namespace ListManagement
                 {
                     Console.WriteLine(ex.Message);
                     user_selection = "E";
+                    itemService.FirstPage();
                 }
                 
             }
