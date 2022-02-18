@@ -249,6 +249,7 @@ namespace ListManagement
         static void ListAllTasks(ItemService itemService)
         {
             itemService.ShowComplete = true;
+            itemService.ShowQuery = false;
             if(!StartPaging(itemService))
             {
                 Console.WriteLine("\nThere is no task in the List\n");
