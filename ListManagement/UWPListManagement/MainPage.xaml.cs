@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UWPListManagement.Dialogs;
+using UWPListManagement.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -24,19 +26,16 @@ namespace UWPListManagement
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private ObservableCollection<Item> items;
-        public ObservableCollection<Item> Items { get { return items; } }
-
         public MainPage()
         {
-            items = new ObservableCollection<Item>();
             this.InitializeComponent();
-            DataContext = this;
+            DataContext = new MainViewModel();
         }
-
-        private void AddItem(object sender, RoutedEventArgs e)
+        private async void AddItem(object sender, RoutedEventArgs e)
         {
-            Items.Add(new Item { Name="ok", Description="ok ok"});
+            var dialog = new ToDoDialog();
+            (DataContext as MainViewModel).Add();
+            await dialog.ShowAsync();
         }
     }
 }

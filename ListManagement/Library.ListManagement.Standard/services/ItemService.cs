@@ -3,6 +3,7 @@ using ListManagement.models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace ListManagement.services
 {
     public class ItemService
     {
-        private List<Item> items;
+        private ObservableCollection<Item> items;
         private string query;
         private ListNavigator<Item> item_nav;
         private static ItemService instance;
@@ -22,7 +23,7 @@ namespace ListManagement.services
         private JsonSerializerSettings serializer_settings
             = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All};
 
-        public List<Item> Items { get { return items; } }
+        public ObservableCollection<Item> Items { get { return items; } }
 
         public bool ShowComplete {get; set; }
         public bool ShowQuery { get; set; }
@@ -95,7 +96,7 @@ namespace ListManagement.services
 
         private ItemService()
         {
-            items = new List<Item>();
+            items = new ObservableCollection<Item>();
             ShowComplete = true;
             ShowQuery = false;
             
@@ -104,12 +105,12 @@ namespace ListManagement.services
             {
                 try
                 {
-                    items = JsonConvert.DeserializeObject<List<Item>>(File.ReadAllText(persistence_path), serializer_settings) ?? new List<Item>();
+                    items = JsonConvert.DeserializeObject<ObservableCollection<Item>>(File.ReadAllText(persistence_path), serializer_settings) ?? new ObservableCollection<Item>();
                 }
                 catch(Exception ex)
                 {
                     File.Delete(persistence_path);
-                    items = new List<Item>();
+                    items = new ObservableCollection<Item>();
                 }
             }
             item_nav = new ListNavigator<Item>(FilteredItems, 5);
