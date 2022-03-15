@@ -8,3 +8,7 @@
 /ListManagement/ListManagement/bin/Debug/net6.0
 /ListManagement/Library.ListManagement/bin/Debug/net6.0
 /ListManagement/Library.ListManagement/obj
+/ListManagement/UWPListManagement/bin/x86/Debug
+/ListManagement/UWPListManagement/obj
+/ListManagement/Library.ListManagement.Standard/bin/Debug/netstandard2.0
+/ListManagement/Library.ListManagement.Standard/obj

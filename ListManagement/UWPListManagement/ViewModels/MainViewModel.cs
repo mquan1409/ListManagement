@@ -19,9 +19,6 @@ namespace UWPListManagement.ViewModels
         {
         }
 
-        public void Add()
-        {
-            Items.Add(new Item { Name = "ok", Description = "ok ok" });
-        }
+        public Item SelectedItem { get; set; }
     }
 }

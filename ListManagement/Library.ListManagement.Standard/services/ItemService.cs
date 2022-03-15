@@ -125,6 +125,8 @@ namespace ListManagement.services
         }
         public void Add(Item item_added)
         {
+            if (item_added.Id <= 0)
+                item_added.Id = NextId;
             items.Add(item_added);
         }
 
@@ -140,6 +142,18 @@ namespace ListManagement.services
         public void Replace(int index, Item item_replaced)
         {
             items[index] = item_replaced;
+        }
+
+        private int NextId 
+        { 
+            get
+            {
+                if (Items.Any())
+                {
+                    return Items.Select(item => item.Id).Max() + 1;
+                }
+                return 1;
+            } 
         }
     }
 }

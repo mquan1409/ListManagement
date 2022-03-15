@@ -34,7 +34,12 @@ namespace UWPListManagement
         private async void AddItem(object sender, RoutedEventArgs e)
         {
             var dialog = new ToDoDialog();
-            (DataContext as MainViewModel).Add();
+            await dialog.ShowAsync();
+        }
+
+        private async void EditItem(object sender, RoutedEventArgs e)
+        {
+            var dialog = new ToDoDialog((DataContext as MainViewModel).SelectedItem);
             await dialog.ShowAsync();
         }
     }
