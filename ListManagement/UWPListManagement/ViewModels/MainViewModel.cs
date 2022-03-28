@@ -20,5 +20,15 @@ namespace UWPListManagement.ViewModels
         }
 
         public Item SelectedItem { get; set; }
+
+        public void DeleteItem()
+        {
+            Items.Remove(SelectedItem);
+        }
+
+        public void SaveItem()
+        {
+            itemService.Save();
+        }
     }
 }

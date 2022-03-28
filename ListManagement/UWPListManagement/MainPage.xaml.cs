@@ -42,5 +42,15 @@ namespace UWPListManagement
             var dialog = new ToDoDialog((DataContext as MainViewModel).SelectedItem);
             await dialog.ShowAsync();
         }
+
+        private void DeleteItem(object sender, RoutedEventArgs e)
+        {
+            (DataContext as MainViewModel).DeleteItem();
+        }
+
+        private void SaveItem(object sender, RoutedEventArgs e)
+        {
+            (DataContext as MainViewModel).SaveItem();
+        }
     }
 }
