@@ -100,7 +100,7 @@ namespace ListManagement.services
             ShowComplete = true;
             ShowQuery = false;
             
-            persistence_path = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\SaveData.json";
+            persistence_path = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\SaveData.json";
             if (File.Exists(persistence_path))
             {
                 try

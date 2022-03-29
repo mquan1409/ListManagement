@@ -33,13 +33,13 @@ namespace UWPListManagement
         }
         private async void AddItem(object sender, RoutedEventArgs e)
         {
-            var dialog = new ToDoDialog();
+            var dialog = new TaskDialog();
             await dialog.ShowAsync();
         }
 
         private async void EditItem(object sender, RoutedEventArgs e)
         {
-            var dialog = new ToDoDialog((DataContext as MainViewModel).SelectedItem);
+            var dialog = new TaskDialog((DataContext as MainViewModel).SelectedItem);
             await dialog.ShowAsync();
         }
 

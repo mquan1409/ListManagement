@@ -19,16 +19,16 @@ using Windows.UI.Xaml.Navigation;
 
 namespace UWPListManagement.Dialogs
 {
-    public sealed partial class ToDoDialog : ContentDialog
+    public sealed partial class TaskDialog : ContentDialog
     {
         ItemService itemService = ItemService.Current;
-        public ToDoDialog()
+        public TaskDialog()
         {
             this.InitializeComponent();
             DataContext = new Task();
         }
 
-        public ToDoDialog(Item selected_item)
+        public TaskDialog(Item selected_item)
         {
             this.InitializeComponent();
             DataContext = selected_item;
