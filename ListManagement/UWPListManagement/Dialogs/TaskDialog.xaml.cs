@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UWPListManagement.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -25,17 +26,17 @@ namespace UWPListManagement.Dialogs
         public TaskDialog()
         {
             this.InitializeComponent();
-            DataContext = new Task();
+            DataContext = new ItemViewModel(new Task());
         }
 
         public TaskDialog(Item selected_item)
         {
             this.InitializeComponent();
-            DataContext = selected_item;
+            DataContext = new ItemViewModel(selected_item);
         }
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            var item = DataContext as Task;
+            var item = (DataContext as ItemViewModel).BoundItem;
             if(itemService.Items.Any(i => i.Id == item.Id))
             {
                 var edited_item = itemService.Items.FirstOrDefault(i => i.Id == item.Id);
