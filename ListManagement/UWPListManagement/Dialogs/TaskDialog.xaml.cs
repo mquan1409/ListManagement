@@ -2,9 +2,12 @@
 using ListManagement.services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UWPListManagement.services;
 using UWPListManagement.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -20,32 +23,40 @@ using Windows.UI.Xaml.Navigation;
 
 namespace UWPListManagement.Dialogs
 {
-    public sealed partial class TaskDialog : ContentDialog
+    public sealed partial class TaskDialog : ContentDialog, INotifyPropertyChanged
     {
-        ItemService itemService = ItemService.Current;
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        ItemServiceProxy itemService = ItemServiceProxy.Current;
         public TaskDialog()
         {
             this.InitializeComponent();
             DataContext = new ItemViewModel(new Task());
         }
 
-        public TaskDialog(Item selected_item)
+        public TaskDialog(ItemViewModel selected_item)
         {
             this.InitializeComponent();
-            DataContext = new ItemViewModel(selected_item);
+            DataContext = selected_item;
         }
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            var item = (DataContext as ItemViewModel).BoundItem;
+            var item = (DataContext as ItemViewModel);
             if(itemService.Items.Any(i => i.Id == item.Id))
             {
                 var edited_item = itemService.Items.FirstOrDefault(i => i.Id == item.Id);
                 itemService.RemoveAt(itemService.Items.IndexOf(edited_item));
-                itemService.Add(edited_item);
+                itemService.Add(item);
             }
             else if (item != null)
             {
                 itemService.Add(item);
+                //NotifyPropertyChanged("Items");
+                
             }
         }
 

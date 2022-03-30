@@ -1,7 +1,9 @@
 ﻿using ListManagement.models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
@@ -9,11 +11,52 @@ using Task = ListManagement.models.Task;
 
 namespace UWPListManagement.ViewModels
 {
-    public class ItemViewModel
+    public class ItemViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private bool isRadioButtonTaskChecked = true;
+        public bool RadioButtonTaskChecked { 
+            get { return isRadioButtonTaskChecked; } 
+            set {
+                if(value == true)
+                {
+                    isRadioButtonTaskChecked = value;
+                    BoundTask = new Task();
+                    BoundAppointment = null;
+                }
+                else
+                {
+                    isRadioButtonTaskChecked = value;
+                    BoundTask = null;
+                    BoundAppointment = new Appointment();
+                }
+                NotifyPropertyChanged("IsTaskCreating");
+                NotifyPropertyChanged("IsAppointmentCreating");
+            } 
+        }
+
+        public Visibility IsTaskCreating {
+            get 
+            {
+                return isRadioButtonTaskChecked ? Visibility.Visible : Visibility.Collapsed;
+            } 
+        }
+        public Visibility IsAppointmentCreating
+        {
+            get
+            {
+                return (!isRadioButtonTaskChecked) ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
         public Task BoundTask { get; set; }
         public Appointment BoundAppointment { get; set; }
-        public Item BoundItem { 
+        public Item BoundItem 
+        { 
             get
             { 
                 if(IsTask)
@@ -50,7 +93,8 @@ namespace UWPListManagement.ViewModels
                     BoundTask.isCompleted = value;
             }
         }
-        public string Name { 
+        public string Name 
+        { 
             get 
             { 
                 return BoundItem?.Name ?? String.Empty;
@@ -61,7 +105,8 @@ namespace UWPListManagement.ViewModels
                     BoundItem.Name = value;
             }
         }
-        public string Description { 
+        public string Description 
+        { 
             get 
             { 
                 return BoundItem?.Description ?? String.Empty;
@@ -71,6 +116,11 @@ namespace UWPListManagement.ViewModels
                 if(BoundItem != null)
                     BoundItem.Description = value;
             }
+        }
+        public int Id
+        {
+            get { return BoundItem?.Id ?? -1;}
+            set { BoundItem.Id = value;}
         }
         public ItemViewModel(Item item)
         {
@@ -87,6 +137,10 @@ namespace UWPListManagement.ViewModels
                 IsCompleted = false;
             }
 
+        }
+        public override string ToString()
+        {
+            return $"{Id} {Name} {Description}";
         }
     }
 }

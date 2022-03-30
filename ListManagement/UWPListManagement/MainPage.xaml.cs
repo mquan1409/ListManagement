@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -24,13 +25,16 @@ namespace UWPListManagement
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : Page, INotifyPropertyChanged
     {
         public MainPage()
         {
             this.InitializeComponent();
             DataContext = new MainViewModel();
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private async void AddItem(object sender, RoutedEventArgs e)
         {
             var dialog = new TaskDialog();

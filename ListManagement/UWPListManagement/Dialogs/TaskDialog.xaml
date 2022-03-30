@@ -16,8 +16,23 @@
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Task" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+            <RadioButton Grid.Column="1" GroupName="TaskOrAppointment" IsChecked="{Binding Path=RadioButtonTaskChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></RadioButton>
+            <TextBlock Grid.Column="2" Text="Appointment" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+            <RadioButton Grid.Column="3" GroupName="TaskOrAppointment" IsChecked="{Binding Path=!RadioButtonTaskChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></RadioButton>
+        </Grid>
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
                 <ColumnDefinition Width="7*"></ColumnDefinition>
@@ -25,13 +40,35 @@
             <TextBlock Grid.Column="0" Text="Name" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
             <TextBox Grid.Column="1" Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </Grid>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
                 <ColumnDefinition Width="7*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="Description" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
             <TextBox Grid.Column="1" Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Visibility="{Binding Path=IsTaskCreating, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="7*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Due Date" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+                <TextBox Grid.Column="1" Text=""></TextBox>
+            </Grid>
+            <Grid Grid.Row="1" Visibility="{Binding Path=IsAppointmentCreating, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                    <ColumnDefinition Width="7*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Attendees" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+                <TextBox Grid.Column="1" Text=""></TextBox>
+            </Grid>
         </Grid>
     </Grid>
 </ContentDialog>

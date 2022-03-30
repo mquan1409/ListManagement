@@ -3,27 +3,37 @@ using ListManagement.services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using UWPListManagement.services;
 using Windows.UI.Xaml;
 
 namespace UWPListManagement.ViewModels
 {
-    public class MainViewModel
+    public class MainViewModel : INotifyPropertyChanged
     {
-        ItemService itemService = ItemService.Current;
-        public ObservableCollection<Item> Items { get { return itemService.Items; } }
+        ItemServiceProxy itemService = ItemServiceProxy.Current;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public ObservableCollection<ItemViewModel> Items { get { return itemService.Items; } }
 
         public MainViewModel()
         {
         }
 
-        public Item SelectedItem { get; set; }
+        public ItemViewModel SelectedItem { get; set; }
 
         public void DeleteItem()
         {
-            Items.Remove(SelectedItem);
+            itemService.Remove(SelectedItem);
         }
 
         public void SaveItem()
