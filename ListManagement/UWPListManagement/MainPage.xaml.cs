@@ -61,5 +61,10 @@ namespace UWPListManagement
         {
             (DataContext as MainViewModel).MoreDetails();
         }
+
+        private void SearchItems(object sender, RoutedEventArgs e)
+        {
+            (DataContext as MainViewModel).SearchItems();
+        }
     }
 }

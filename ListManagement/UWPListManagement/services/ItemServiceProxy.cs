@@ -94,6 +94,19 @@ namespace UWPListManagement.services
                 return items;
             }
         }
+
+        public void SearchItems()
+        {
+            itemService.Items.Clear();
+            foreach (var item in Items)
+                itemService.Items.Add(item.BoundItem);
+            itemService.ShowQuery = true;
+            itemService.Query = "Diem";
+            var filtered_items = new ObservableCollection<ItemViewModel>(itemService.FilteredItems.Select(i => new ItemViewModel(i)));
+            Items.Clear();
+            foreach(var item in filtered_items)
+                Items.Add(item);
+        }
         private int NextId
         {
             get

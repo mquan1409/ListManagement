@@ -47,5 +47,10 @@ namespace UWPListManagement.ViewModels
         {
             itemService.Save();
         }
+
+        public void SearchItems()
+        {
+            itemService.SearchItems();
+        }
     }
 }
