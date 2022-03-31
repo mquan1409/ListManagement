@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using UWPListManagement.Dialogs;
 using UWPListManagement.services;
 using Windows.UI.Xaml;
 
@@ -30,6 +31,12 @@ namespace UWPListManagement.ViewModels
         }
 
         public ItemViewModel SelectedItem { get; set; }
+
+        public async void MoreDetails()
+        {
+            var dialog = new DetailDialog(SelectedItem);
+            await dialog.ShowAsync();
+        }
 
         public void DeleteItem()
         {

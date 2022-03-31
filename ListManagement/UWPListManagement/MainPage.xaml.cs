@@ -56,5 +56,10 @@ namespace UWPListManagement
         {
             (DataContext as MainViewModel).SaveItem();
         }
+
+        private void MoreDetails(object sender, RoutedEventArgs e)
+        {
+            (DataContext as MainViewModel).MoreDetails();
+        }
     }
 }

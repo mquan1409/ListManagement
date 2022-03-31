@@ -51,7 +51,11 @@ namespace UWPListManagement.services
         private ItemServiceProxy()
         {
             itemService = ItemService.Current;
-            items = new ObservableCollection<ItemViewModel>(itemService.Items.Select(i => new ItemViewModel(i)));
+            items = new ObservableCollection<ItemViewModel>();
+            foreach(var item in itemService.Items)
+            {
+                this.Add(new ItemViewModel(item));
+            }
         }
         public void Remove(ItemViewModel item)
         {
@@ -71,7 +75,10 @@ namespace UWPListManagement.services
             //NotifyPropertyChanged("Items");
             if (item.Id <= 0)
                 item.Id = NextId;
-            Items.Add(item);
+            if(item.IsTask)
+                Items.Insert(0,item);
+            else
+                Items.Insert(Items.Count,item);
         }
         public void Save()
         {

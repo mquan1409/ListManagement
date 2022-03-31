@@ -71,11 +71,18 @@ namespace UWPListManagement.ViewModels
                 return BoundTask != null;
             }
         }
-        public Visibility IsCompleteVisibility
+        public Visibility IsTaskVisibility
         {
             get
             {
                 return IsTask ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+        public Visibility IsAppointmentVisibility
+        {
+            get
+            {
+                return (!IsTask) ? Visibility.Visible : Visibility.Collapsed;
             }
         }
         public bool IsCompleted

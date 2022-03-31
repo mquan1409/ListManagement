@@ -27,7 +27,31 @@
             <Button Grid.Column="3" Content="Search" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Button>
 
         </Grid>
-        <ListBox Grid.Row="1" ItemsSource="{Binding Path=Items, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></ListBox>
+        <ListBox Grid.Row="1" ItemsSource="{Binding Path=Items, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="14*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <TextBlock Visibility="{Binding Path=IsAppointmentVisibility}" Text=""></TextBlock>
+                            <CheckBox Visibility="{Binding Path=IsTaskVisibility}" IsChecked="{Binding Path=IsCompleted}"></CheckBox>
+                        </Grid>
+                        <Grid Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="25" Text="{Binding Path=Name}"></TextBlock>
+                            <TextBlock Grid.Row="1" FontSize="20" Text="{Binding Path=Description}"></TextBlock>
+                        </Grid>
+
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
@@ -38,7 +62,7 @@
             <Button Grid.Column="0" Content="Add" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="AddItem"></Button>
             <Button Grid.Column="1" Content="Edit" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="EditItem"></Button>
             <Button Grid.Column="2" Content="Delete" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="DeleteItem"></Button>
-            <Button Grid.Column="3" Content="Ok" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Button>
+            <Button Grid.Column="3" Content="More" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="MoreDetails"></Button>
 
         </Grid>
     </Grid>
