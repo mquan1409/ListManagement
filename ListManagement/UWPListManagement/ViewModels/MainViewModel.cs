@@ -52,5 +52,22 @@ namespace UWPListManagement.ViewModels
         {
             itemService.SearchItems();
         }
+        public string Query
+        {
+            get 
+            { 
+                return itemService.Query; 
+            }
+            set 
+            { 
+                itemService.Query = value; 
+            }
+        }
+        public void Refresh() 
+        {
+            itemService.Refresh();
+            Query = "";
+            NotifyPropertyChanged("Query");
+        }
     }
 }

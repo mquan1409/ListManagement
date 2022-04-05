@@ -66,5 +66,10 @@ namespace UWPListManagement
         {
             (DataContext as MainViewModel).SearchItems();
         }
+
+        private void RefreshItems(object sender, RoutedEventArgs e)
+        {
+            (DataContext as MainViewModel).Refresh();
+        }
     }
 }

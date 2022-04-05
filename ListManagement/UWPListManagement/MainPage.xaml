@@ -17,15 +17,14 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
                 <ColumnDefinition Width="10*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Content="Save" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="SaveItem"></Button>
-            <Button Grid.Column="1" Content="Load" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Button>
-            <TextBox Grid.Column="2"></TextBox>
-            <Button Grid.Column="3" Content="Search" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="SearchItems"></Button>
-
+            <TextBox Grid.Column="1" Text="{Binding Path=Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="21" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBox>
+            <Button Grid.Column="2" Content="Search" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="SearchItems"></Button>
+            <Button Grid.Column="3" Content="Refresh" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="RefreshItems"></Button>
         </Grid>
         <ListBox Grid.Row="1" ItemsSource="{Binding Path=Items, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <ListBox.ItemTemplate>

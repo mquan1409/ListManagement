@@ -23,7 +23,9 @@ namespace UWPListManagement.ViewModels
         public bool RadioButtonTaskChecked { 
             get { return isRadioButtonTaskChecked; } 
             set {
-                if(value == true)
+                Name = System.String.Empty;
+                Description = System.String.Empty;
+                if (value == true)
                 {
                     isRadioButtonTaskChecked = value;
                     BoundTask = new Task();
@@ -37,6 +39,8 @@ namespace UWPListManagement.ViewModels
                 }
                 NotifyPropertyChanged("IsTaskCreating");
                 NotifyPropertyChanged("IsAppointmentCreating");
+                NotifyPropertyChanged("Name");
+                NotifyPropertyChanged("Description");
             } 
         }
 
@@ -98,6 +102,35 @@ namespace UWPListManagement.ViewModels
             {
                 if (IsTask)
                     BoundTask.isCompleted = value;
+            }
+        }
+        public string Attendees
+        {
+            get
+            {
+                if (!IsTask)
+                {
+                    string attendees_str = System.String.Empty;
+                    foreach (string name in BoundAppointment.Attendees)
+                    {
+                        attendees_str += name;
+                        attendees_str += ", ";
+                    }
+                    attendees_str = attendees_str.Remove(attendees_str.Length - 1);
+                    attendees_str = attendees_str.Remove(attendees_str.Length - 1);
+                    return attendees_str;
+                }
+                else
+                    return "";
+            }
+            set
+            {
+                BoundAppointment.Attendees.Clear();
+                if(!IsTask)
+                    foreach (var name in value.Split(", "))
+                    {
+                        BoundAppointment.Attendees.Add(name);
+                    };
             }
         }
         public string Name 

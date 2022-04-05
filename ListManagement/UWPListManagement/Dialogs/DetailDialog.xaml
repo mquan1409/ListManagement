@@ -24,7 +24,7 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Name:"></TextBlock>
+            <TextBlock Grid.Column="0" Text="Name:"></TextBlock>
             <TextBlock Grid.Column="1" Text="{Binding Path=Name}"></TextBlock>
         </Grid>
         <Grid Grid.Row="1">
@@ -32,8 +32,24 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Description:"></TextBlock>
+            <TextBlock Grid.Column="0" Text="Description:"></TextBlock>
             <TextBlock Grid.Column="1" Text="{Binding Path=Description}"></TextBlock>
+        </Grid>
+        <Grid Grid.Row="2" Visibility="{Binding Path=IsTaskVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Due Date:"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding Path=BoundTask.Deadline}"></TextBlock>
+        </Grid>
+        <Grid Grid.Row="2" Visibility="{Binding Path=IsAppointmentVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text=" Attendees:"></TextBlock>
+            <TextBlock Grid.Column="1" Text="{Binding Path=Attendees}"></TextBlock>
         </Grid>
         
 

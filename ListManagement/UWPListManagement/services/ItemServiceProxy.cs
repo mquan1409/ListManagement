@@ -101,11 +101,29 @@ namespace UWPListManagement.services
             foreach (var item in Items)
                 itemService.Items.Add(item.BoundItem);
             itemService.ShowQuery = true;
-            itemService.Query = "Diem";
             var filtered_items = new ObservableCollection<ItemViewModel>(itemService.FilteredItems.Select(i => new ItemViewModel(i)));
             Items.Clear();
             foreach(var item in filtered_items)
                 Items.Add(item);
+        }
+        public void Refresh()
+        {
+            Items.Clear();
+            foreach (var item in itemService.Items)
+            {
+                this.Add(new ItemViewModel(item));
+            }
+        }
+        public string Query
+        {
+            get
+                {
+                return itemService.Query;
+            }
+            set
+            { 
+                itemService.Query = value; 
+            }
         }
         private int NextId
         {
