@@ -8,7 +8,7 @@ namespace ListManagement.models
 {
     public class Task : Item
     {      
-        public string Deadline { get; set; }
+        public DateTime Deadline { get; set; }
         public bool isCompleted { get; set; }
 
     }

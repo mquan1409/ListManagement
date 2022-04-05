@@ -29,12 +29,15 @@ namespace UWPListManagement.ViewModels
                     isRadioButtonTaskChecked = value;
                     BoundTask = new Task();
                     BoundAppointment = null;
+                    BoundDeadline = DateTime.Now;
                 }
                 else
                 {
                     isRadioButtonTaskChecked = value;
                     BoundTask = null;
                     BoundAppointment = new Appointment();
+                    BoundStartDate = DateTime.Now;
+                    BoundEndDate = DateTime.Now;
                 }
                 NotifyPropertyChanged("IsTaskCreating");
                 NotifyPropertyChanged("IsAppointmentCreating");
@@ -43,12 +46,63 @@ namespace UWPListManagement.ViewModels
                 NotifyPropertyChanged("Attendees");
             }
         }
+        private DateTimeOffset boundDeadline;
+        public DateTimeOffset BoundDeadline
+        {
+            get { 
+                return boundDeadline;
+            }
+            set 
+            {
+                boundDeadline = value;
+                if (IsTask)
+                {
+                    BoundTask.Deadline = boundDeadline.Date;
+                }
+                NotifyPropertyChanged("BoundDeadline");
+            }
+        }
+        private DateTimeOffset boundStartDate;
+        public DateTimeOffset BoundStartDate
+        {
+            get
+            {
+                return boundStartDate;
+            }
+            set
+            {
+                boundStartDate = value;
+                if (!IsTask)
+                {
+                    BoundAppointment.Start = boundStartDate.Date;
+                }
+                NotifyPropertyChanged("BoundStartDate");
+            }
+        }
+        private DateTimeOffset boundEndDate;
+        public DateTimeOffset BoundEndDate
+        {
+            get
+            {
+                return boundEndDate;
+            }
+            set
+            {
+                boundEndDate = value;
+                if (!IsTask)
+                {
+                    BoundAppointment.End = boundEndDate.Date;
+                }
+                NotifyPropertyChanged("BoundEndDate");
+            }
+        }
 
-        public Visibility IsTaskCreating {
-            get 
+        public Visibility IsTaskCreating
+        {
+            get
             {
                 return IsTask ? Visibility.Visible : Visibility.Collapsed;
-            } 
+            }
         }
         public Visibility IsAppointmentCreating
         {
@@ -176,12 +230,15 @@ namespace UWPListManagement.ViewModels
                 BoundTask = item as Task;
                 BoundAppointment = null;
                 IsCompleted = BoundTask.isCompleted;
+                BoundDeadline = DateTime.Now;
             }
             else if(item is Appointment)
             {
                 BoundTask = null;
                 BoundAppointment = item as Appointment;
                 IsCompleted = false;
+                BoundStartDate = DateTime.Now;
+                BoundEndDate = DateTime.Now;
             }
 
         }

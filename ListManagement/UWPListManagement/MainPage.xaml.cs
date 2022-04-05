@@ -38,13 +38,15 @@ namespace UWPListManagement
         private async void AddItem(object sender, RoutedEventArgs e)
         {
             var dialog = new TaskDialog();
-            await dialog.ShowAsync();
+            try { await dialog.ShowAsync(); }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
         }
 
         private async void EditItem(object sender, RoutedEventArgs e)
         {
             var dialog = new TaskDialog((DataContext as MainViewModel).SelectedItem);
             await dialog.ShowAsync();
+            
         }
 
         private void DeleteItem(object sender, RoutedEventArgs e)

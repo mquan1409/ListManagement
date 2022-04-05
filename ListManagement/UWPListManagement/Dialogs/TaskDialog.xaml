@@ -59,15 +59,46 @@
                     <ColumnDefinition Width="7*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Due Date" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
-                <TextBox Grid.Column="1" Text=""></TextBox>
+                <Grid Grid.Column="1">
+                    <DatePicker SelectedDate="{Binding Path=BoundDeadline, Mode=TwoWay}"></DatePicker>
+                </Grid>
             </Grid>
             <Grid Grid.Row="1" Visibility="{Binding Path=IsAppointmentCreating, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"></ColumnDefinition>
-                    <ColumnDefinition Width="7*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="Attendees" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
-                <TextBox Grid.Column="1" Text="{Binding Path=Attendees, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                            <ColumnDefinition Width="7*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Start Date" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+                        <Grid Grid.Column="1">
+                            <DatePicker SelectedDate="{Binding Path=BoundStartDate, Mode=TwoWay}"></DatePicker>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                            <ColumnDefinition Width="7*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="End Date" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+                        <Grid Grid.Column="1">
+                            <DatePicker SelectedDate="{Binding Path=BoundEndDate, Mode=TwoWay}"></DatePicker>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                            <ColumnDefinition Width="7*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Attendees" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+                        <TextBox Grid.Column="1" Text="{Binding Path=Attendees, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>
