@@ -36,12 +36,14 @@ namespace UWPListManagement.Dialogs
         {
             this.InitializeComponent();
             DataContext = new ItemViewModel(new Task());
+            (DataContext as ItemViewModel).IsEditing = false;
         }
 
         public TaskDialog(ItemViewModel selected_item)
         {
             this.InitializeComponent();
             DataContext = selected_item;
+            (DataContext as ItemViewModel).IsEditing = true;
         }
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {

@@ -108,6 +108,13 @@ namespace UWPListManagement.services
         }
         public void Refresh()
         {
+            if(!itemService.ShowQuery)
+            {
+                itemService.Items.Clear();
+                foreach (var item in Items)
+                    itemService.Items.Add(item.BoundItem);
+            }
+            itemService.ShowQuery = false;
             Items.Clear();
             foreach (var item in itemService.Items)
             {

@@ -20,7 +20,7 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" Visibility="{Binding Path=IsEditingVisibility, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>

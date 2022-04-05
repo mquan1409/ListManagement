@@ -18,13 +18,12 @@ namespace UWPListManagement.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        public bool IsEditing { get; set; }
 
         private bool isRadioButtonTaskChecked = true;
         public bool RadioButtonTaskChecked { 
             get { return isRadioButtonTaskChecked; } 
             set {
-                Name = System.String.Empty;
-                Description = System.String.Empty;
                 if (value == true)
                 {
                     isRadioButtonTaskChecked = value;
@@ -41,20 +40,21 @@ namespace UWPListManagement.ViewModels
                 NotifyPropertyChanged("IsAppointmentCreating");
                 NotifyPropertyChanged("Name");
                 NotifyPropertyChanged("Description");
-            } 
+                NotifyPropertyChanged("Attendees");
+            }
         }
 
         public Visibility IsTaskCreating {
             get 
             {
-                return isRadioButtonTaskChecked ? Visibility.Visible : Visibility.Collapsed;
+                return IsTask ? Visibility.Visible : Visibility.Collapsed;
             } 
         }
         public Visibility IsAppointmentCreating
         {
             get
             {
-                return (!isRadioButtonTaskChecked) ? Visibility.Visible : Visibility.Collapsed;
+                return (!IsTask) ? Visibility.Visible : Visibility.Collapsed;
             }
         }
         public Task BoundTask { get; set; }
@@ -89,6 +89,13 @@ namespace UWPListManagement.ViewModels
                 return (!IsTask) ? Visibility.Visible : Visibility.Collapsed;
             }
         }
+        public Visibility IsEditingVisibility
+        {
+            get
+            {
+                return (!IsEditing) ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
         public bool IsCompleted
         {
             get
@@ -108,7 +115,7 @@ namespace UWPListManagement.ViewModels
         {
             get
             {
-                if (!IsTask)
+                if ((!IsTask) && (BoundAppointment.Attendees.Count != 0))
                 {
                     string attendees_str = System.String.Empty;
                     foreach (string name in BoundAppointment.Attendees)
