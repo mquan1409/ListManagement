@@ -7,9 +7,13 @@ using System.Threading.Tasks;
 namespace ListManagement.models
 {
     public class Task : Item
-    {      
+    {
         public DateTime Deadline { get; set; }
         public bool isCompleted { get; set; }
+        public Task()
+        {
+            Priority = 1;
+        }
 
     }
 }

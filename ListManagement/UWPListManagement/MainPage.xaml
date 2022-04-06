@@ -32,11 +32,11 @@
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"></ColumnDefinition>
-                            <ColumnDefinition Width="14*"></ColumnDefinition>
+                            <ColumnDefinition Width="50"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                            <TextBlock Visibility="{Binding Path=IsAppointmentVisibility}" Text=""></TextBlock>
+                        <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <TextBlock Visibility="{Binding Path=IsAppointmentVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Text="Event" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
                             <CheckBox Visibility="{Binding Path=IsTaskVisibility}" IsChecked="{Binding Path=IsCompleted}"></CheckBox>
                         </Grid>
                         <Grid Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -47,7 +47,7 @@
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="25" Text="{Binding Path=Name}"></TextBlock>
                             <TextBlock Grid.Row="1" FontSize="20" Text="{Binding Path=Description}"></TextBlock>
-                            <TextBlock Grid.Row="2" FontSize="20" Text="{Binding Path=Priority}"></TextBlock>
+                            <TextBlock Grid.Row="2" FontSize="16" FontStyle="Italic" Text="{Binding Path=PriorityText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                         </Grid>
 
                     </Grid>
@@ -56,8 +56,8 @@
         </ListBox>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"></ColumnDefinition>
-                <ColumnDefinition Width="7*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="9*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="Sort Increasing Priority" FontSize="22" FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Stretch" VerticalAlignment="Center"></TextBlock>
             <CheckBox Grid.Column="1" IsChecked="{Binding Path=SortChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>

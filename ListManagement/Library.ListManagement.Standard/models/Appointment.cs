@@ -14,6 +14,7 @@ namespace ListManagement.models
         public List<string> Attendees { get; set;  }
         public Appointment()
         {
+            Priority = 1;
             Attendees = new List<string>();
         }
     }

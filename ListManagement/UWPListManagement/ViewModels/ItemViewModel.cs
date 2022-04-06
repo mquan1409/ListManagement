@@ -266,6 +266,16 @@ namespace UWPListManagement.ViewModels
             get { return BoundItem?.Priority ?? -1;}
             set { BoundItem.Priority = value;}
         }
+        public string PriorityText
+        {
+            get
+            {
+                if (Priority == 1) return "Low Priority";
+                else if (Priority == 2) return "Medium Priority";
+                else if (Priority == 3) return "High Priority";
+                else return "No Priority";
+            }
+        }
         public ItemViewModel(Item item)
         {
             if(item is Task)
@@ -274,7 +284,6 @@ namespace UWPListManagement.ViewModels
                 BoundAppointment = null;
                 IsCompleted = BoundTask.isCompleted;
                 BoundDeadline = DateTime.Now;
-                Priority = 1;
             }
             else if(item is Appointment)
             {

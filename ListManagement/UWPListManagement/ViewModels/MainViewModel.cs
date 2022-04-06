@@ -24,7 +24,8 @@ namespace UWPListManagement.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ObservableCollection<ItemViewModel> Items { 
+        public ObservableCollection<ItemViewModel> Items 
+        { 
             get {
                 if(sortChecked)
                 {
@@ -88,11 +89,7 @@ namespace UWPListManagement.ViewModels
             set
             {
                 sortChecked = value;
-                if (sortChecked)
-                {
-                    itemService.SortIncreasePriority();
-                    NotifyPropertyChanged("Items");
-                }
+                NotifyPropertyChanged("Items");
             }
         }
     }
