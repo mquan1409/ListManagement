@@ -33,6 +33,29 @@
             <RadioButton Grid.Column="3" GroupName="TaskOrAppointment" IsChecked="{Binding Path=!RadioButtonTaskChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></RadioButton>
         </Grid>
         <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="Priority" HorizontalAlignment="Center" VerticalAlignment="Stretch"></TextBlock>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Low" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+                <RadioButton Grid.Column="1" GroupName="PriorityOptions" IsChecked="{Binding Path=LowPriority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></RadioButton>
+                <TextBlock Grid.Column="2" Text="Medium" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+                <RadioButton Grid.Column="3" GroupName="PriorityOptions" IsChecked="{Binding Path=MedPriority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></RadioButton>
+                <TextBlock Grid.Column="4" Text="High" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
+                <RadioButton Grid.Column="5" GroupName="PriorityOptions" IsChecked="{Binding Path=HighPriority, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></RadioButton>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
                 <ColumnDefinition Width="7*"></ColumnDefinition>
@@ -40,7 +63,7 @@
             <TextBlock Grid.Column="0" Text="Name" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
             <TextBox Grid.Column="1" Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </Grid>
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
                 <ColumnDefinition Width="7*"></ColumnDefinition>
@@ -48,7 +71,8 @@
             <TextBlock Grid.Column="0" Text="Description" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
             <TextBox Grid.Column="1" Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </Grid>
-        <Grid Grid.Row="3">
+        
+        <Grid Grid.Row="4">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>

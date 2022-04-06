@@ -19,6 +19,12 @@ namespace UWPListManagement.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         public bool IsEditing { get; set; }
+        private bool lowPriority = true;
+        private bool medPriority = false;
+        private bool highPriority = false;
+        public bool LowPriority { get { return lowPriority; } set { lowPriority = value; Priority = 1; NotifyPropertyChanged("LowPriority"); } }
+        public bool MedPriority { get { return medPriority; } set { medPriority = value; Priority = 2; NotifyPropertyChanged("MedPriority"); } }
+        public bool HighPriority { get { return highPriority; } set { highPriority = value; Priority = 3; NotifyPropertyChanged("HighPriority"); } }
 
         private bool isRadioButtonTaskChecked = true;
         public bool RadioButtonTaskChecked { 
@@ -222,6 +228,11 @@ namespace UWPListManagement.ViewModels
         {
             get { return BoundItem?.Id ?? -1;}
             set { BoundItem.Id = value;}
+        }
+        public int Priority
+        {
+            get { return BoundItem?.Priority ?? -1;}
+            set { BoundItem.Priority = value;}
         }
         public ItemViewModel(Item item)
         {
