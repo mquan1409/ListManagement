@@ -37,7 +37,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                             <TextBlock Visibility="{Binding Path=IsAppointmentVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Text="Event" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
-                            <CheckBox Visibility="{Binding Path=IsTaskVisibility}" IsChecked="{Binding Path=IsCompleted}"></CheckBox>
+                            <CheckBox Visibility="{Binding Path=IsTaskVisibility}" IsChecked="{Binding Path=IsCompleted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
                         </Grid>
                         <Grid Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                             <Grid.RowDefinitions>
@@ -56,11 +56,15 @@
         </ListBox>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="9*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="Sort Increasing Priority" FontSize="22" FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Stretch" VerticalAlignment="Center"></TextBlock>
             <CheckBox Grid.Column="1" IsChecked="{Binding Path=SortChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+            <TextBlock Grid.Column="2" Text="Show Complete Tasks" FontSize="22" FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Stretch" VerticalAlignment="Center"></TextBlock>
+            <CheckBox Grid.Column="3" IsChecked="{Binding Path=ShowCompleteChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>

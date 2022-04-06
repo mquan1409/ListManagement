@@ -23,14 +23,31 @@ namespace UWPListManagement.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        private ObservableCollection<ItemViewModel> sortedItems;
+        public ObservableCollection<ItemViewModel> SortedItems
+        {
+            get { return sortedItems; }
+            set { sortedItems = value; }
+        }
 
         public ObservableCollection<ItemViewModel> Items 
         { 
             get {
-                if(sortChecked)
+                if (sortChecked || showCompleteChecked)
                 {
-                    return new ObservableCollection<ItemViewModel>(itemService.Items.OrderBy(i => i.Priority));
+                    sortedItems = new ObservableCollection<ItemViewModel>(itemService.Items);
+                    if (sortChecked)
+                    {
+                        sortedItems = new ObservableCollection<ItemViewModel>(itemService.Items.OrderBy(i => i.Priority));
+                    }
+                    if (showCompleteChecked)
+                    {
+                        sortedItems = new ObservableCollection<ItemViewModel>(sortedItems.Where(i => i.IsCompleted));
+                    }
+                    return sortedItems;
                 }
+                
+
                 return itemService.Items; 
             } 
         }
@@ -89,6 +106,19 @@ namespace UWPListManagement.ViewModels
             set
             {
                 sortChecked = value;
+                NotifyPropertyChanged("Items");
+            }
+        }
+        private bool showCompleteChecked = false;
+        public bool ShowCompleteChecked
+        {
+            get
+            {
+                return showCompleteChecked;
+            }
+            set
+            {
+                showCompleteChecked = value;
                 NotifyPropertyChanged("Items");
             }
         }
