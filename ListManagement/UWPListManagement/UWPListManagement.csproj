@@ -119,14 +119,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\AppointmentDialog.xaml.cs">
-      <DependentUpon>AppointmentDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Dialogs\DetailDialog.xaml.cs">
       <DependentUpon>DetailDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\ItemDialog.xaml.cs">
-      <DependentUpon>ItemDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\TaskDialog.xaml.cs">
       <DependentUpon>TaskDialog.xaml</DependentUpon>
@@ -159,15 +153,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Dialogs\AppointmentDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Dialogs\DetailDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\ItemDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
