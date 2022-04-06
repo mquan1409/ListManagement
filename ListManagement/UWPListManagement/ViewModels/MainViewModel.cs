@@ -24,7 +24,15 @@ namespace UWPListManagement.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ObservableCollection<ItemViewModel> Items { get { return itemService.Items; } }
+        public ObservableCollection<ItemViewModel> Items { 
+            get {
+                if(sortChecked)
+                {
+                    return new ObservableCollection<ItemViewModel>(itemService.Items.OrderBy(i => i.Priority));
+                }
+                return itemService.Items; 
+            } 
+        }
 
         public MainViewModel()
         {
@@ -67,7 +75,25 @@ namespace UWPListManagement.ViewModels
         {
             itemService.Refresh();
             Query = "";
+            SortChecked = false;
             NotifyPropertyChanged("Query");
+        }
+        private bool sortChecked = false;
+        public bool SortChecked
+        {
+            get
+            { 
+                return sortChecked; 
+            }
+            set
+            {
+                sortChecked = value;
+                if (sortChecked)
+                {
+                    itemService.SortIncreasePriority();
+                    NotifyPropertyChanged("Items");
+                }
+            }
         }
     }
 }

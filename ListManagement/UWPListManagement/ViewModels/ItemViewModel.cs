@@ -22,9 +22,39 @@ namespace UWPListManagement.ViewModels
         private bool lowPriority = true;
         private bool medPriority = false;
         private bool highPriority = false;
-        public bool LowPriority { get { return lowPriority; } set { lowPriority = value; Priority = 1; NotifyPropertyChanged("LowPriority"); } }
-        public bool MedPriority { get { return medPriority; } set { medPriority = value; Priority = 2; NotifyPropertyChanged("MedPriority"); } }
-        public bool HighPriority { get { return highPriority; } set { highPriority = value; Priority = 3; NotifyPropertyChanged("HighPriority"); } }
+        public bool LowPriority 
+        { 
+            get { return lowPriority; } 
+            set 
+            { 
+                lowPriority = value; 
+                if(lowPriority)
+                    Priority = 1; 
+                NotifyPropertyChanged("LowPriority"); 
+            } 
+        }
+        public bool MedPriority 
+        {
+            get { return medPriority; } 
+            set 
+            { 
+                medPriority = value; 
+                if(medPriority)
+                    Priority = 2; 
+                NotifyPropertyChanged("MedPriority"); 
+            } 
+        }
+        public bool HighPriority 
+        { 
+            get { return highPriority; } 
+            set 
+            { 
+                highPriority = value; 
+                if(highPriority)
+                    Priority = 3; 
+                NotifyPropertyChanged("HighPriority"); 
+            } 
+        }
 
         private bool isRadioButtonTaskChecked = true;
         public bool RadioButtonTaskChecked { 
@@ -36,6 +66,7 @@ namespace UWPListManagement.ViewModels
                     BoundTask = new Task();
                     BoundAppointment = null;
                     BoundDeadline = DateTime.Now;
+                    Priority = 1;
                 }
                 else
                 {
@@ -44,6 +75,7 @@ namespace UWPListManagement.ViewModels
                     BoundAppointment = new Appointment();
                     BoundStartDate = DateTime.Now;
                     BoundEndDate = DateTime.Now;
+                    Priority = 1;
                 }
                 NotifyPropertyChanged("IsTaskCreating");
                 NotifyPropertyChanged("IsAppointmentCreating");
@@ -242,6 +274,7 @@ namespace UWPListManagement.ViewModels
                 BoundAppointment = null;
                 IsCompleted = BoundTask.isCompleted;
                 BoundDeadline = DateTime.Now;
+                Priority = 1;
             }
             else if(item is Appointment)
             {

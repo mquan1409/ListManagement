@@ -13,6 +13,7 @@
             <RowDefinition Height="1*"></RowDefinition>
             <RowDefinition Height="15*"></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -42,9 +43,11 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition></RowDefinition>
                                 <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="25" Text="{Binding Path=Name}"></TextBlock>
                             <TextBlock Grid.Row="1" FontSize="20" Text="{Binding Path=Description}"></TextBlock>
+                            <TextBlock Grid.Row="2" FontSize="20" Text="{Binding Path=Priority}"></TextBlock>
                         </Grid>
 
                     </Grid>
@@ -52,6 +55,14 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="7*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Sort Increasing Priority" FontSize="22" FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Stretch" VerticalAlignment="Center"></TextBlock>
+            <CheckBox Grid.Column="1" IsChecked="{Binding Path=SortChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+        </Grid>
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>

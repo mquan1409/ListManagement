@@ -121,6 +121,27 @@ namespace UWPListManagement.services
                 this.Add(new ItemViewModel(item));
             }
         }
+        public void SortIncreasePriority()
+        {
+            for(int i = 0; i < Items.Count - 1; i++)
+            {
+                for(int j = 0; j < Items.Count; j++)
+                {
+                    if(Items[j].Priority < Items[i].Priority)
+                    {
+                        ItemViewModel c = Items[j];
+                        
+                        Items[j] = Items[i];
+                        Items[i] = c;
+                        NotifyPropertyChanged("Items");
+                        //Items.RemoveAt(j);
+                        //Items.Insert(j, Items[i]);
+                        //Items.RemoveAt(i);
+                        //Items.Insert(i, c);
+                    }
+                }
+            }
+        }
         public string Query
         {
             get

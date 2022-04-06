@@ -77,15 +77,14 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Visibility="{Binding Path=IsTaskCreating, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+            <Grid Grid.Row="0" HorizontalAlignment="Stretch" Visibility="{Binding Path=IsTaskCreating, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"></ColumnDefinition>
-                    <ColumnDefinition Width="7*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Due Date" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
-                <Grid Grid.Column="1">
-                    <DatePicker SelectedDate="{Binding Path=BoundDeadline, Mode=TwoWay}"></DatePicker>
-                </Grid>
+                <DatePicker Grid.Column="1" SelectedDate="{Binding Path=BoundDeadline, Mode=TwoWay}" HorizontalAlignment="Stretch"></DatePicker>
+                
             </Grid>
             <Grid Grid.Row="1" Visibility="{Binding Path=IsAppointmentCreating, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                 <Grid>
@@ -101,7 +100,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="Start Date" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
                         <Grid Grid.Column="1">
-                            <DatePicker SelectedDate="{Binding Path=BoundStartDate, Mode=TwoWay}"></DatePicker>
+                            <DatePicker VerticalAlignment="Stretch" SelectedDate="{Binding Path=BoundStartDate, Mode=TwoWay}"></DatePicker>
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="1">
@@ -111,7 +110,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="End Date" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></TextBlock>
                         <Grid Grid.Column="1">
-                            <DatePicker SelectedDate="{Binding Path=BoundEndDate, Mode=TwoWay}"></DatePicker>
+                            <DatePicker VerticalAlignment="Stretch" SelectedDate="{Binding Path=BoundEndDate, Mode=TwoWay}"></DatePicker>
                         </Grid>
                     </Grid>
                     <Grid Grid.Row="2">
