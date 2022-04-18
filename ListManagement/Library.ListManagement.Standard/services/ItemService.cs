@@ -101,10 +101,10 @@ namespace ListManagement.services
             items = new ObservableCollection<ItemDTO>();
             ShowComplete = true;
             ShowQuery = false;
-
+            var str = new WebRequestHandler()
+                .Get("http://localhost:7020/Item").Result;
             var payload = JsonConvert
-                .DeserializeObject<List<ItemDTO>>(new WebRequestHandler()
-                .Get("http://localhost:7020/Item").Result);
+                .DeserializeObject<List<ItemDTO>>(str);
             items.Clear();
             payload.ForEach(items.Add);
 
