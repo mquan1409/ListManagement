@@ -1,4 +1,5 @@
-﻿using ListManagement.models;
+﻿using Library.ListManagement.Standard.DTO;
+using ListManagement.models;
 using ListManagement.services;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace UWPListManagement.Dialogs
         public TaskDialog()
         {
             this.InitializeComponent();
-            DataContext = new ItemViewModel(new Task());
+            DataContext = new ItemViewModel(new TaskDTO());
             (DataContext as ItemViewModel).IsEditing = false;
         }
 

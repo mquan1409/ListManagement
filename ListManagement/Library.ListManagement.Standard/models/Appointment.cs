@@ -1,4 +1,5 @@
-﻿using ListManagement.models;
+﻿using Library.ListManagement.Standard.DTO;
+using ListManagement.models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,14 @@ namespace ListManagement.models
         {
             Priority = 1;
             Attendees = new List<string>();
+        }
+        public Appointment(AppointmentDTO appointment)
+        {
+            Name = appointment.Name;
+            Description = appointment.Description;
+            Start = appointment.Start;
+            End = appointment.End;
+            Attendees = appointment.Attendees;
         }
     }
 }

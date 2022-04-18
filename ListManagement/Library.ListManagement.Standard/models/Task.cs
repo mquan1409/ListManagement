@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Library.ListManagement.Standard.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,12 @@ namespace ListManagement.models
         {
             Priority = 1;
         }
-
+        public Task(TaskDTO task)
+        {
+            Name = task.Name;
+            Description = task.Description;
+            Deadline = task.Deadline;
+            Priority = task.Priority;
+        }
     }
 }

@@ -6,18 +6,21 @@ namespace API.ListManagement.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AppointmentController : ControllerBase
+    public class ItemController : Controller
     {
         private readonly ILogger<TaskController> _logger;
-        public AppointmentController(ILogger<TaskController> logger)
+
+        public ItemController(ILogger<TaskController> logger)
         {
             _logger = logger;
         }
-
         [HttpGet]
         public IEnumerable<ItemDTO> Get()
         {
-            return new AppointmentEC().Get();
+            var items = new List<ItemDTO>();
+            items.AddRange(new TaskEC().Get().ToList());
+            items.AddRange(new AppointmentEC().Get().ToList());
+            return items;
         }
     }
 }

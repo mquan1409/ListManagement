@@ -1,5 +1,6 @@
 ﻿using Library.ListManagement.helpers;
 using Library.ListManagement.Standard.DTO;
+using Library.ListManagement.Standard.utilities;
 using ListManagement.models;
 using Newtonsoft.Json;
 using System;
@@ -100,20 +101,27 @@ namespace ListManagement.services
             items = new ObservableCollection<ItemDTO>();
             ShowComplete = true;
             ShowQuery = false;
-            
-            persistence_path = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\SaveData.json";
-            if (File.Exists(persistence_path))
-            {
-                try
-                {
-                    items = JsonConvert.DeserializeObject<ObservableCollection<ItemDTO>>(File.ReadAllText(persistence_path), serializer_settings) ?? new ObservableCollection<ItemDTO>();
-                }
-                catch(Exception ex)
-                {
-                    File.Delete(persistence_path);
-                    items = new ObservableCollection<ItemDTO>();
-                }
-            }
+
+            var payload = JsonConvert
+                .DeserializeObject<List<ItemDTO>>(new WebRequestHandler()
+                .Get("http://localhost:7020/Item").Result);
+            items.Clear();
+            payload.ForEach(items.Add);
+
+
+            //persistence_path = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\SaveData.json";
+            //if (File.Exists(persistence_path))
+            //{
+            //    try
+            //    {
+            //        items = JsonConvert.DeserializeObject<ObservableCollection<ItemDTO>>(File.ReadAllText(persistence_path), serializer_settings) ?? new ObservableCollection<ItemDTO>();
+            //    }
+            //    catch(Exception ex)
+            //    {
+            //        File.Delete(persistence_path);
+            //        items = new ObservableCollection<ItemDTO>();
+            //    }
+            //}
             //item_nav = new ListNavigator<Item>(FilteredItems, 5);
         }
         public void Save()
@@ -145,7 +153,7 @@ namespace ListManagement.services
             items[index] = item_replaced;
         }
 
-        private int NextId 
+        public int NextId 
         { 
             get
             {

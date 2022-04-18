@@ -1,6 +1,6 @@
 using API.ListManagement.database;
 using Library.ListManagement.Standard.DTO;
-using Library.ListManagement.Standard.EC;
+using API.ListManagement.EC;
 using ListManagement.models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +21,12 @@ namespace API.ListManagement.Controllers
         public IEnumerable<ItemDTO> Get()
         {
             return new TaskEC().Get();
+        }
+
+        [HttpPost("AddOrUpdate")]
+        public TaskDTO AddOrUpdate([FromBody] TaskDTO task)
+        {
+            return new TaskEC().AddOrUpdate(task);
         }
     }
 }
