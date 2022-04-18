@@ -1,4 +1,5 @@
 ﻿using Library.ListManagement.helpers;
+using Library.ListManagement.Standard.DTO;
 using ListManagement.models;
 using Newtonsoft.Json;
 using System;
@@ -15,15 +16,15 @@ namespace ListManagement.services
 {
     public class ItemService
     {
-        private ObservableCollection<Item> items;
+        private ObservableCollection<ItemDTO> items;
         private string query;
-        private ListNavigator<Item> item_nav;
+        private ListNavigator<ItemDTO> item_nav;
         private static ItemService instance;
         private string persistence_path;
         private JsonSerializerSettings serializer_settings
             = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All};
 
-        public ObservableCollection<Item> Items { get { return items; } }
+        public ObservableCollection<ItemDTO> Items { get { return items; } }
 
         public bool ShowComplete {get; set; }
         public bool ShowQuery { get; set; }
@@ -37,11 +38,11 @@ namespace ListManagement.services
                 query = value.ToUpper();
             } 
         }
-        public IEnumerable<Item> FilteredItems { 
+        public IEnumerable<ItemDTO> FilteredItems { 
             get {
                 var incomplete_items =  items.Where(i => 
                 
-                (!ShowComplete && !ShowQuery && !(((i as Task)?.isCompleted) ?? true))
+                (!ShowComplete && !ShowQuery && !(((i as TaskDTO)?.isCompleted) ?? true))
 
                 || ShowComplete);
 
@@ -49,7 +50,7 @@ namespace ListManagement.services
                     ((ShowQuery &&
                        ((i.Name.ToUpper() == Query) ||
                        (i.Description.ToUpper() == Query) ||
-                       ((i as Appointment)?.Attendees?.Select(t => t.ToUpper())?.Contains(Query) ?? false)))
+                       ((i as AppointmentDTO)?.Attendees?.Select(t => t.ToUpper())?.Contains(Query) ?? false)))
                     || !ShowQuery));
 
                 return filtered_items;
@@ -66,37 +67,37 @@ namespace ListManagement.services
                 return instance; 
             } 
         }
-        public Dictionary<object, Item> GetPage()
+        public Dictionary<object, ItemDTO> GetPage()
         {
             var page = item_nav.GetCurrentPage();
             if (item_nav.HasNextPage)
             {
-                page.Add("N", new Item { Name = "Next" });
+                page.Add("N", new ItemDTO { Name = "Next" });
             }
             if (item_nav.HasPreviousPage)
             {
-                page.Add("P", new Item { Name = "Previous" });
+                page.Add("P", new ItemDTO { Name = "Previous" });
             }
-            page.Add("E", new Item { Name = "Exit" });
+            page.Add("E", new ItemDTO { Name = "Exit" });
             return page;
         }
-        public Dictionary<object, Item> FirstPage()
+        public Dictionary<object, ItemDTO> FirstPage()
         {
             return item_nav.GoToFirstPage();
         }
-        public Dictionary<object, Item> NextPage()
+        public Dictionary<object, ItemDTO> NextPage()
         {
             return item_nav.GoForward();
         }
 
-        public Dictionary<object, Item> PreviousPage()
+        public Dictionary<object, ItemDTO> PreviousPage()
         {
             return item_nav.GoBackward();
         }
 
         private ItemService()
         {
-            items = new ObservableCollection<Item>();
+            items = new ObservableCollection<ItemDTO>();
             ShowComplete = true;
             ShowQuery = false;
             
@@ -105,15 +106,15 @@ namespace ListManagement.services
             {
                 try
                 {
-                    items = JsonConvert.DeserializeObject<ObservableCollection<Item>>(File.ReadAllText(persistence_path), serializer_settings) ?? new ObservableCollection<Item>();
+                    items = JsonConvert.DeserializeObject<ObservableCollection<ItemDTO>>(File.ReadAllText(persistence_path), serializer_settings) ?? new ObservableCollection<ItemDTO>();
                 }
                 catch(Exception ex)
                 {
                     File.Delete(persistence_path);
-                    items = new ObservableCollection<Item>();
+                    items = new ObservableCollection<ItemDTO>();
                 }
             }
-            item_nav = new ListNavigator<Item>(FilteredItems, 5);
+            //item_nav = new ListNavigator<Item>(FilteredItems, 5);
         }
         public void Save()
         {
@@ -123,14 +124,14 @@ namespace ListManagement.services
                 File.Delete(persistence_path);
             File.WriteAllText(persistence_path, list_json);
         }
-        public void Add(Item item_added)
+        public void Add(ItemDTO item_added)
         {
             if (item_added.Id <= 0)
                 item_added.Id = NextId;
             items.Add(item_added);
         }
 
-        public void Remove(Item item_removed)
+        public void Remove(ItemDTO item_removed)
         {
             items.Remove(item_removed);
 
@@ -139,7 +140,7 @@ namespace ListManagement.services
         {
             items.RemoveAt(index);
         }
-        public void Replace(int index, Item item_replaced)
+        public void Replace(int index, ItemDTO item_replaced)
         {
             items[index] = item_replaced;
         }
