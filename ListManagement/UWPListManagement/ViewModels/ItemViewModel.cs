@@ -1,4 +1,5 @@
-﻿using ListManagement.models;
+﻿using Library.ListManagement.Standard.DTO;
+using ListManagement.models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -63,7 +64,7 @@ namespace UWPListManagement.ViewModels
                 if (value == true)
                 {
                     isRadioButtonTaskChecked = value;
-                    BoundTask = new Task();
+                    BoundTask = new TaskDTO();
                     BoundAppointment = null;
                     BoundDeadline = DateTime.Now;
                     Priority = 1;
@@ -72,7 +73,7 @@ namespace UWPListManagement.ViewModels
                 {
                     isRadioButtonTaskChecked = value;
                     BoundTask = null;
-                    BoundAppointment = new Appointment();
+                    BoundAppointment = new AppointmentDTO();
                     BoundStartDate = DateTime.Now;
                     BoundEndDate = DateTime.Now;
                     Priority = 1;
@@ -149,9 +150,9 @@ namespace UWPListManagement.ViewModels
                 return (!IsTask) ? Visibility.Visible : Visibility.Collapsed;
             }
         }
-        public Task BoundTask { get; set; }
-        public Appointment BoundAppointment { get; set; }
-        public Item BoundItem 
+        public TaskDTO BoundTask { get; set; }
+        public AppointmentDTO BoundAppointment { get; set; }
+        public ItemDTO BoundItem 
         { 
             get
             { 
@@ -276,19 +277,19 @@ namespace UWPListManagement.ViewModels
                 else return "No Priority";
             }
         }
-        public ItemViewModel(Item item)
+        public ItemViewModel(ItemDTO item)
         {
-            if(item is Task)
+            if(item is TaskDTO)
             {
-                BoundTask = item as Task;
+                BoundTask = item as TaskDTO;
                 BoundAppointment = null;
                 IsCompleted = BoundTask.isCompleted;
                 BoundDeadline = DateTime.Now;
             }
-            else if(item is Appointment)
+            else if(item is AppointmentDTO)
             {
                 BoundTask = null;
-                BoundAppointment = item as Appointment;
+                BoundAppointment = item as AppointmentDTO;
                 IsCompleted = false;
                 BoundStartDate = DateTime.Now;
                 BoundEndDate = DateTime.Now;

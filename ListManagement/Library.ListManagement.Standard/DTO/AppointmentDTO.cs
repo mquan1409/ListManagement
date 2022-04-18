@@ -1,4 +1,6 @@
-﻿using ListManagement.models;
+﻿using Library.ListManagement.Standard.utilities;
+using ListManagement.models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +9,7 @@ namespace Library.ListManagement.Standard.DTO
 {
     public class AppointmentDTO : ItemDTO
     {
+        [JsonConverter(typeof(ItemJsonConverter))]
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public List<string> Attendees { get; set; }
