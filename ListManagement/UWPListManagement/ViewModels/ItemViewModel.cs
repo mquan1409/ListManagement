@@ -284,17 +284,16 @@ namespace UWPListManagement.ViewModels
                 BoundTask = item as TaskDTO;
                 BoundAppointment = null;
                 IsCompleted = BoundTask.isCompleted;
-                BoundDeadline = DateTime.Now;
+                BoundDeadline = BoundTask.Deadline;
             }
             else if(item is AppointmentDTO)
             {
                 BoundTask = null;
                 BoundAppointment = item as AppointmentDTO;
                 IsCompleted = false;
-                BoundStartDate = DateTime.Now;
-                BoundEndDate = DateTime.Now;
+                BoundStartDate = BoundAppointment.Start;
+                BoundEndDate = BoundAppointment.End;
             }
-
         }
         public override string ToString()
         {

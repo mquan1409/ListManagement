@@ -50,13 +50,13 @@ namespace UWPListManagement.Dialogs
         {
             var item = (DataContext as ItemViewModel);
 
-            //if (itemService.Items.Any(i => i.Id == item.Id))
-            //{
-            //    var edited_item = itemService.Items.FirstOrDefault(i => i.Id == item.Id);
-            //    itemService.RemoveAt(itemService.Items.IndexOf(edited_item));
-            //    await itemService.Add(item);
-            //}
-            if (item != null)
+            if (itemService.Items.Any(i => i.Id == item.Id))
+            {
+                var edited_item = itemService.Items.FirstOrDefault(i => i.Id == item.Id);
+                itemService.RemoveAt(itemService.Items.IndexOf(edited_item));
+                itemService.Add(item);
+            }
+            else if (item != null)
             {
                 itemService.Add(item);
                 //NotifyPropertyChanged("Items");
