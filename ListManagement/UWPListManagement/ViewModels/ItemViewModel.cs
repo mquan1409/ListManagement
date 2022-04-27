@@ -1,5 +1,6 @@
 ﻿using Library.ListManagement.Standard.DTO;
 using ListManagement.models;
+using ListManagement.services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -201,7 +202,13 @@ namespace UWPListManagement.ViewModels
             set
             {
                 if (IsTask)
+                {
                     BoundTask.isCompleted = value;
+                    if(BoundTask.Id != 0)
+                    {
+                        ItemService.Current.Add(BoundTask);
+                    }
+                }
             }
         }
         public string Attendees

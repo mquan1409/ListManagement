@@ -52,8 +52,7 @@ namespace UWPListManagement.Dialogs
 
             if (itemService.Items.Any(i => i.Id == item.Id))
             {
-                var edited_item = itemService.Items.FirstOrDefault(i => i.Id == item.Id);
-                itemService.RemoveAt(itemService.Items.IndexOf(edited_item));
+                //var edited_item = itemService.Items.FirstOrDefault(i => i.Id == item.Id);
                 itemService.Add(item);
             }
             else if (item != null)

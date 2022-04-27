@@ -22,6 +22,7 @@ namespace ListManagement.models
             Description = task.Description;
             Deadline = task.Deadline;
             Priority = task.Priority;
+            isCompleted = task.isCompleted;
         }
     }
 }
