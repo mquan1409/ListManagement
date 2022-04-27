@@ -17,6 +17,7 @@ namespace ListManagement.models
         }
         public Task(TaskDTO task)
         {
+            Id = task.Id;
             Name = task.Name;
             Description = task.Description;
             Deadline = task.Deadline;

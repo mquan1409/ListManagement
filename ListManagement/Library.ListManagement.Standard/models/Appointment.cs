@@ -20,11 +20,13 @@ namespace ListManagement.models
         }
         public Appointment(AppointmentDTO appointment)
         {
+            Id = appointment.Id;
             Name = appointment.Name;
             Description = appointment.Description;
             Start = appointment.Start;
             End = appointment.End;
             Attendees = appointment.Attendees;
+            Priority = appointment.Priority;
         }
     }
 }

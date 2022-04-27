@@ -24,7 +24,8 @@ namespace Library.ListManagement.Standard.DTO
         }
         public AppointmentDTO()
         {
-
+            Priority = 1;
+            Attendees = new List<string>();
         }
     }
 }

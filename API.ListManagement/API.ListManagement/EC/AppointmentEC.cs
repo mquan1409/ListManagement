@@ -19,19 +19,20 @@ namespace API.ListManagement.EC
             if (appointment.Id <= 0)
             {
                 appointment.Id = ItemService.Current.NextId;
+                FakeDatabase.Appointments.Add(new Appointment(appointment));
             }
             else
             {
-                var updatedAppointment = FakeDatabase.Tasks.FirstOrDefault(a => a.Id == appointment.Id);
+                var updatedAppointment = FakeDatabase.Appointments.FirstOrDefault(a => a.Id == appointment.Id);
                 if (updatedAppointment != null)
                 {
-                    var index = FakeDatabase.Tasks.IndexOf(updatedAppointment);
-                    FakeDatabase.Tasks.Remove(updatedAppointment);
-                    FakeDatabase.Tasks.Insert(index, new Appointment(appointment));
+                    var index = FakeDatabase.Appointments.IndexOf(updatedAppointment);
+                    FakeDatabase.Appointments.Remove(updatedAppointment);
+                    FakeDatabase.Appointments.Insert(index, new Appointment(appointment));
                 }
                 else
                 {
-                    FakeDatabase.Tasks.Add(new Appointment(appointment));
+                    FakeDatabase.Appointments.Add(new Appointment(appointment));
                 }
             }
 
