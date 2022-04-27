@@ -140,10 +140,13 @@ namespace ListManagement.services
         public void Save()
         {
             
-            var list_json = JsonConvert.SerializeObject(Items, serializer_settings);
-            if (File.Exists(persistence_path))
-                File.Delete(persistence_path);
-            File.WriteAllText(persistence_path, list_json);
+            //var list_json = JsonConvert.SerializeObject(Items, serializer_settings);
+            //if (File.Exists(persistence_path))
+            //    File.Delete(persistence_path);
+            //File.WriteAllText(persistence_path, list_json);
+
+            //Because I have implemented pass-through add, pass-through remove, pass-through edit, ...
+            //Every change has been made to the web server
         }
         public async Task<ItemDTO> Add(ItemDTO item_added)
         {
