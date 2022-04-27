@@ -52,10 +52,11 @@ namespace UWPListManagement.services
         {
             itemService = ItemService.Current;
             items = new ObservableCollection<ItemViewModel>();
-            foreach(var item in itemService.Items)
-            {
-                this.Add(new ItemViewModel(item));
-            }
+            //foreach(var item in itemService.Items)
+            //{
+            //    await this.Add(new ItemViewModel(item));
+            //}
+            //await Refresh();
         }
         public void Remove(ItemViewModel item)
         {
@@ -69,28 +70,32 @@ namespace UWPListManagement.services
             //NotifyPropertyChanged("Items");
             Items.RemoveAt(index);
         }
-        public void Add(ItemViewModel item)
+        public async Task<ItemViewModel> Add(ItemViewModel item)
         {
             //itemService.Add(item.BoundItem);
             //NotifyPropertyChanged("Items");
-            if (item.Id <= 0)
-                item.Id = NextId;
-            if(item.IsTask)
-                Items.Insert(0,item);
-            else
-                Items.Insert(Items.Count,item);
+            //if (item.Id <= 0)
+            //    item.Id = NextId;
+            var item_DTO = await itemService.Add(item.BoundItem);
+            await Refresh();
+            //if (item.IsTask)
+            //    Items.Insert(0, item);
+            //else
+            //    Items.Insert(Items.Count, item);
+            return new ItemViewModel(item_DTO);
         }
-        public void Save()
+        public async void Save()
         {
             itemService.Items.Clear();
             foreach (var item in Items)
-                itemService.Items.Add(item.BoundItem);
+                await itemService.Add(item.BoundItem);
             itemService.Save();
         }
         public ObservableCollection<ItemViewModel> Items
         {
             get
             {
+                items = Refresh().Result;
                 return items;
             }
         }
@@ -106,20 +111,25 @@ namespace UWPListManagement.services
             foreach(var item in filtered_items)
                 Items.Add(item);
         }
-        public void Refresh()
+        public async Task<ObservableCollection<ItemViewModel>> Refresh()
         {
-            if(!itemService.ShowQuery)
-            {
-                itemService.Items.Clear();
-                foreach (var item in Items)
-                    itemService.Items.Add(item.BoundItem);
-            }
+            //if(!itemService.ShowQuery)
+            //{
+            //    //itemService.Items.Clear();
+            //    foreach (var item in items)
+            //        await itemService.Add(item.BoundItem);
+            //}
             itemService.ShowQuery = false;
-            Items.Clear();
-            foreach (var item in itemService.Items)
+            items.Clear();
+            foreach (var i in itemService.Items)
             {
-                this.Add(new ItemViewModel(item));
+                var item = new ItemViewModel(i);
+                if (item.IsTask)
+                    items.Insert(0, item);
+                else
+                    items.Insert(items.Count, item);
             }
+            return items;
         }
         public string Query
         {

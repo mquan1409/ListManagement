@@ -9,7 +9,6 @@ namespace Library.ListManagement.Standard.DTO
 {
     public class AppointmentDTO : ItemDTO
     {
-        [JsonConverter(typeof(ItemJsonConverter))]
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public List<string> Attendees { get; set; }

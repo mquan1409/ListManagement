@@ -19,7 +19,7 @@ namespace API.ListManagement.Controllers
         {
             var items = new List<ItemDTO>();
             items.AddRange(new TaskEC().Get().ToList());
-            items.AddRange(new AppointmentEC().Get().ToList());
+            items.AddRange(new AppointmentEC().Get());
             return items;
         }
     }

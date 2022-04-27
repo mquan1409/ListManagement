@@ -19,5 +19,11 @@ namespace API.ListManagement.Controllers
         {
             return new AppointmentEC().Get();
         }
+
+        [HttpPost("AddOrUpdate")]
+        public AppointmentDTO AddOrUpdate([FromBody] AppointmentDTO appointment)
+        {
+            return new AppointmentEC().AddOrUpdate(appointment);
+        }
     }
 }

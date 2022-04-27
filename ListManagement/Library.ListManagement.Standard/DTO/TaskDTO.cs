@@ -9,7 +9,6 @@ namespace Library.ListManagement.Standard.DTO
 {
     public class TaskDTO : ItemDTO
     {
-        [JsonConverter(typeof(ItemJsonConverter))]
         public DateTime Deadline { get; set; }
         public bool isCompleted { get; set; }
         public TaskDTO(Item i):base(i)
@@ -17,13 +16,17 @@ namespace Library.ListManagement.Standard.DTO
             var task = i as Task;
             if (task != null)
             {
-                this.Deadline = task.Deadline;
-                this.isCompleted = task.isCompleted;
+                Deadline = task.Deadline;
+                isCompleted = task.isCompleted;
             }
         }
         public TaskDTO()
         {
 
+        }
+        public override string ToString()
+        {
+            return $"{Id} {Name} {Description} {isCompleted}"; 
         }
     }
 }

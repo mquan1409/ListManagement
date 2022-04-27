@@ -20,6 +20,7 @@ namespace API.ListManagement.EC
             if(task.Id <= 0)
             {
                 task.Id = ItemService.Current.NextId;
+                FakeDatabase.Tasks.Add(new Task(task));
             }
             else
             {

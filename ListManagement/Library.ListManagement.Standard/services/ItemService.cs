@@ -25,7 +25,17 @@ namespace ListManagement.services
         private JsonSerializerSettings serializer_settings
             = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All};
 
-        public ObservableCollection<ItemDTO> Items { get { return items; } }
+        public ObservableCollection<ItemDTO> Items { 
+            get 
+            {
+                var payload = JsonConvert
+                    .DeserializeObject<List<ItemDTO>>(new WebRequestHandler()
+                    .Get("http://localhost:7020/Item").Result);
+                items.Clear();
+                payload.ForEach(items.Add);
+                return items; 
+            } 
+        }
 
         public bool ShowComplete {get; set; }
         public bool ShowQuery { get; set; }
@@ -101,10 +111,13 @@ namespace ListManagement.services
             items = new ObservableCollection<ItemDTO>();
             ShowComplete = true;
             ShowQuery = false;
-            var str = new WebRequestHandler()
-                .Get("http://localhost:7020/Item").Result;
+            //var str = new WebRequestHandler()
+            //    .Get("http://localhost:7020/Item").Result;
+            //var payload = JsonConvert
+            //    .DeserializeObject<List<ItemDTO>>(str);
             var payload = JsonConvert
-                .DeserializeObject<List<ItemDTO>>(str);
+                    .DeserializeObject<List<ItemDTO>>(new WebRequestHandler()
+                    .Get("http://localhost:7020/Item").Result);
             items.Clear();
             payload.ForEach(items.Add);
 
@@ -132,11 +145,10 @@ namespace ListManagement.services
                 File.Delete(persistence_path);
             File.WriteAllText(persistence_path, list_json);
         }
-        public void Add(ItemDTO item_added)
+        public async Task<TaskDTO> Add(ItemDTO item_added)
         {
-            if (item_added.Id <= 0)
-                item_added.Id = NextId;
-            items.Add(item_added);
+            var toDoStr = await new WebRequestHandler().Post("http://localhost:7020/Task/AddOrUpdate", item_added);
+            return JsonConvert.DeserializeObject<TaskDTO>(toDoStr);
         }
 
         public void Remove(ItemDTO item_removed)
