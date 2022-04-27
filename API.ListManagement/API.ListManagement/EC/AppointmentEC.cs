@@ -38,5 +38,15 @@ namespace API.ListManagement.EC
             return appointment;
         }
 
+        public AppointmentDTO Delete(int id)
+        {
+            var appointmentToDelete = FakeDatabase.Appointments.FirstOrDefault(i => i.Id == id);
+            if (appointmentToDelete != null)
+            {
+                FakeDatabase.Appointments.Remove(appointmentToDelete);
+            }
+
+            return new AppointmentDTO(appointmentToDelete);
+        }
     }
 }

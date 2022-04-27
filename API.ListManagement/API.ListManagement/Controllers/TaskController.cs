@@ -28,5 +28,10 @@ namespace API.ListManagement.Controllers
         {
             return new TaskEC().AddOrUpdate(task);
         }
+        [HttpPost("Delete")]
+        public TaskDTO Delete([FromBody] DeleteItemDTO deleteItemDTO)
+        {
+            return new TaskEC().Delete(deleteItemDTO.IdToDelete);
+        }
     }
 }

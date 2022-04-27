@@ -25,5 +25,11 @@ namespace API.ListManagement.Controllers
         {
             return new AppointmentEC().AddOrUpdate(appointment);
         }
+
+        [HttpPost("Delete")]
+        public AppointmentDTO Delete([FromBody] DeleteItemDTO deleteItemDTO)
+        {
+            return new AppointmentEC().Delete(deleteItemDTO.IdToDelete);
+        }
     }
 }

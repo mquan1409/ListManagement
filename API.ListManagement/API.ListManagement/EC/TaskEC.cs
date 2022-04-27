@@ -36,8 +36,17 @@ namespace API.ListManagement.EC
                     FakeDatabase.Tasks.Add(new Task(task));
                 }
             }
-
             return task;
+        }
+        public TaskDTO Delete(int id)
+        {
+            var taskToDelete = FakeDatabase.Tasks.FirstOrDefault(i => i.Id == id);
+            if (taskToDelete != null)
+            {
+                FakeDatabase.Tasks.Remove(taskToDelete);
+            }
+
+            return new TaskDTO(taskToDelete);
         }
     }
 }

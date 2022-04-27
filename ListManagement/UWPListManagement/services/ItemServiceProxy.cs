@@ -58,17 +58,18 @@ namespace UWPListManagement.services
             //}
             //await Refresh();
         }
-        public void Remove(ItemViewModel item)
+        public async Task<ItemViewModel> Remove(ItemViewModel item)
         {
             //itemService.Remove(item.BoundItem);
             //NotifyPropertyChanged("Items");
-            Items.Remove(item);
+            var item_DTO = await itemService.Remove(item.BoundItem);
+            await Refresh();
+            return new ItemViewModel(item_DTO);
         }
         public void RemoveAt(int index)
         {
             //itemService.RemoveAt(index);
             //NotifyPropertyChanged("Items");
-            Items.RemoveAt(index);
         }
         public async Task<ItemViewModel> Add(ItemViewModel item)
         {

@@ -145,16 +145,32 @@ namespace ListManagement.services
                 File.Delete(persistence_path);
             File.WriteAllText(persistence_path, list_json);
         }
-        public async Task<TaskDTO> Add(ItemDTO item_added)
+        public async Task<ItemDTO> Add(ItemDTO item_added)
         {
-            var toDoStr = await new WebRequestHandler().Post("http://localhost:7020/Task/AddOrUpdate", item_added);
-            return JsonConvert.DeserializeObject<TaskDTO>(toDoStr);
+            if(item_added is TaskDTO)
+            {
+                var taskStr = await new WebRequestHandler().Post("http://localhost:7020/Task/AddOrUpdate", item_added);
+                return JsonConvert.DeserializeObject<TaskDTO>(taskStr);
+            }
+            else
+            {
+                var appointmentStr = await new WebRequestHandler().Post("http://localhost:7020/Appointment/AddOrUpdate", item_added);
+                return JsonConvert.DeserializeObject<AppointmentDTO>(appointmentStr);
+            }
         }
 
-        public void Remove(ItemDTO item_removed)
+        public async Task<ItemDTO> Remove(ItemDTO item_removed)
         {
-            items.Remove(item_removed);
-
+            if(item_removed is TaskDTO)
+            {
+                var deletedTaskStr = await new WebRequestHandler().Post("http://localhost:7020/Task/Delete", new DeleteItemDTO { IdToDelete = item_removed.Id });
+                return JsonConvert.DeserializeObject<TaskDTO>(deletedTaskStr);
+            }
+            else
+            {
+                var deletedAppointmentStr = await new WebRequestHandler().Post("http://localhost:7020/Appointment/Delete", new DeleteItemDTO { IdToDelete = item_removed.Id });
+                return JsonConvert.DeserializeObject<AppointmentDTO>(deletedAppointmentStr);
+            }
         }
         public void RemoveAt(int index)
         {
