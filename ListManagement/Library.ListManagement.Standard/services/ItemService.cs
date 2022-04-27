@@ -51,23 +51,23 @@ namespace ListManagement.services
         }
         public IEnumerable<ItemDTO> FilteredItems { 
             get {
-                var incomplete_items =  items.Where(i => 
-                
-                (!ShowComplete && !ShowQuery && !(((i as TaskDTO)?.isCompleted) ?? true))
+                // var incomplete_items = items.Where(i =>
 
-                || ShowComplete);
+                //(!ShowComplete && !ShowQuery && !(((i as TaskDTO)?.isCompleted) ?? true))
 
-                var filtered_items = incomplete_items.Where(i =>
-                    ((ShowQuery &&
-                       ((i.Name.ToUpper() == Query) ||
-                       (i.Description.ToUpper() == Query) ||
-                       ((i as AppointmentDTO)?.Attendees?.Select(t => t.ToUpper())?.Contains(Query) ?? false)))
-                    || !ShowQuery));
+                //|| ShowComplete);
 
+                // var filtered_items = incomplete_items.Where(i =>
+                //     ((ShowQuery &&
+                //        ((i.Name.ToUpper() == Query) ||
+                //        (i.Description.ToUpper() == Query) ||
+                //        ((i as AppointmentDTO)?.Attendees?.Select(t => t.ToUpper())?.Contains(Query) ?? false)))
+                //     || !ShowQuery));
+
+                // return filtered_items;
+                var filteredItemsStr = new WebRequestHandler().Post("http://localhost:7020/Item/Search", new SearchItemDTO { Query = Query, ShowComplete = ShowComplete, ShowQuery = ShowQuery }).Result;
+                var filtered_items = JsonConvert.DeserializeObject<IEnumerable<ItemDTO>>(filteredItemsStr);
                 return filtered_items;
-
-
-                
             } 
         }
 

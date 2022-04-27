@@ -22,7 +22,7 @@ namespace Library.ListManagement.Standard.DTO
         }
         public TaskDTO()
         {
-
+            Priority = 1;
         }
         public override string ToString()
         {

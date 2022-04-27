@@ -103,32 +103,44 @@ namespace UWPListManagement.services
 
         public void SearchItems()
         {
-            itemService.Items.Clear();
-            foreach (var item in Items)
-                itemService.Items.Add(item.BoundItem);
+            //itemService.Items.Clear();
+            //foreach (var item in Items)
+            //    itemService.Items.Add(item.BoundItem);
+            //itemService.ShowQuery = true;
+            //var filtered_items = new ObservableCollection<ItemViewModel>(itemService.FilteredItems.Select(i => new ItemViewModel(i)));
+            //Items.Clear();
+            //foreach(var item in filtered_items)
+            //    Items.Add(item);
             itemService.ShowQuery = true;
-            var filtered_items = new ObservableCollection<ItemViewModel>(itemService.FilteredItems.Select(i => new ItemViewModel(i)));
-            Items.Clear();
-            foreach(var item in filtered_items)
-                Items.Add(item);
+            itemService.ShowComplete = true;
+            itemService.Query = Query;
         }
         public async Task<ObservableCollection<ItemViewModel>> Refresh()
         {
-            //if(!itemService.ShowQuery)
-            //{
-            //    //itemService.Items.Clear();
-            //    foreach (var item in items)
-            //        await itemService.Add(item.BoundItem);
-            //}
-            itemService.ShowQuery = false;
             items.Clear();
-            foreach (var i in itemService.Items)
+            if (itemService.ShowQuery)
             {
-                var item = new ItemViewModel(i);
-                if (item.IsTask)
-                    items.Insert(0, item);
-                else
-                    items.Insert(items.Count, item);
+                //itemService.Items.Clear();
+                foreach (var i in itemService.FilteredItems)
+                {
+                    var item = new ItemViewModel(i);
+                    if (item.IsTask)
+                        items.Insert(0, item);
+                    else
+                        items.Insert(items.Count, item);
+                }
+                itemService.ShowQuery = false;
+            }
+            else
+            {
+                foreach (var i in itemService.Items)
+                {
+                    var item = new ItemViewModel(i);
+                    if (item.IsTask)
+                        items.Insert(0, item);
+                    else
+                        items.Insert(items.Count, item);
+                }
             }
             return items;
         }

@@ -77,6 +77,7 @@ namespace UWPListManagement.ViewModels
         public void SearchItems()
         {
             itemService.SearchItems();
+            NotifyPropertyChanged("Items");
         }
         public string Query
         {

@@ -22,5 +22,25 @@ namespace API.ListManagement.Controllers
             items.AddRange(new AppointmentEC().Get());
             return items;
         }
+
+        [HttpPost("Search")]
+        public IEnumerable<ItemDTO> Search([FromBody] SearchItemDTO searchItemDTO)
+        {
+            var items = Get();
+            var incomplete_items = items.Where(i =>
+
+               (!searchItemDTO.ShowComplete && !searchItemDTO.ShowQuery && !(((i as TaskDTO)?.isCompleted) ?? true))
+
+               || searchItemDTO.ShowComplete);
+
+            var filtered_items = incomplete_items.Where(i =>
+                ((searchItemDTO.ShowQuery &&
+                   ((i.Name.ToUpper() == searchItemDTO.Query) ||
+                   (i.Description.ToUpper() == searchItemDTO.Query) ||
+                   ((i as AppointmentDTO)?.Attendees?.Select(t => t.ToUpper())?.Contains(searchItemDTO.Query) ?? false)))
+                || !searchItemDTO.ShowQuery));
+
+            return filtered_items;
+        }
     }
 }
