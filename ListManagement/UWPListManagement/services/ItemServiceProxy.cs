@@ -87,10 +87,10 @@ namespace UWPListManagement.services
         }
         public async void Save()
         {
-            itemService.Items.Clear();
-            foreach (var item in Items)
-                await itemService.Add(item.BoundItem);
-            itemService.Save();
+            //itemService.Items.Clear();
+            //foreach (var item in Items)
+            //    await itemService.Add(item.BoundItem);
+            //itemService.Save();
         }
         public ObservableCollection<ItemViewModel> Items
         {

@@ -92,6 +92,8 @@ namespace UWPListManagement.ViewModels
         }
         public void Refresh() 
         {
+            ShowCompleteChecked = false;
+            NotifyPropertyChanged("ShowCompleteChecked");
             itemService.Refresh();
             Query = "";
             SortChecked = false;

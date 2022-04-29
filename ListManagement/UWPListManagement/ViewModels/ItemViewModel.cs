@@ -290,7 +290,8 @@ namespace UWPListManagement.ViewModels
             {
                 BoundTask = item as TaskDTO;
                 BoundAppointment = null;
-                IsCompleted = BoundTask.isCompleted;
+                //IsCompleted = BoundTask.isCompleted;
+                NotifyPropertyChanged("IsCompleted");
                 BoundDeadline = BoundTask.Deadline;
             }
             else if(item is AppointmentDTO)
