@@ -5,6 +5,7 @@ using ListManagement.services;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Api.ToDoApplication.Persistence;
 
 namespace API.ListManagement.EC
 {
@@ -12,14 +13,14 @@ namespace API.ListManagement.EC
     {
         public IEnumerable<AppointmentDTO> Get()
         {
-            return FakeDatabase.Appointments.Select(appointment => new AppointmentDTO(appointment));
+            return Filebase.Current.Appointments.Select(appointment => new AppointmentDTO(appointment));
         }
         public AppointmentDTO AddOrUpdate(AppointmentDTO appointment)
         {
             if (appointment.Id <= 0)
             {
                 appointment.Id = ItemService.Current.NextId;
-                FakeDatabase.Appointments.Add(new Appointment(appointment));
+                Filebase.Current.Appointments.Add(new Appointment(appointment));
             }
             else
             {
@@ -27,12 +28,12 @@ namespace API.ListManagement.EC
                 if (updatedAppointment != null)
                 {
                     var index = FakeDatabase.Appointments.IndexOf(updatedAppointment);
-                    FakeDatabase.Appointments.Remove(updatedAppointment);
-                    FakeDatabase.Appointments.Insert(index, new Appointment(appointment));
+                    Filebase.Current.Delete(updatedAppointment);
+                    Filebase.Current.AddOrUpdate(new Appointment(appointment));
                 }
                 else
                 {
-                    FakeDatabase.Appointments.Add(new Appointment(appointment));
+                    Filebase.Current.AddOrUpdate(new Appointment(appointment));
                 }
             }
 
@@ -41,10 +42,10 @@ namespace API.ListManagement.EC
 
         public AppointmentDTO Delete(int id)
         {
-            var appointmentToDelete = FakeDatabase.Appointments.FirstOrDefault(i => i.Id == id);
+            var appointmentToDelete = Filebase.Current.Appointments.FirstOrDefault(i => i.Id == id);
             if (appointmentToDelete != null)
             {
-                FakeDatabase.Appointments.Remove(appointmentToDelete);
+                Filebase.Current.Delete(appointmentToDelete);
             }
 
             return new AppointmentDTO(appointmentToDelete);

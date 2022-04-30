@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Task = ListManagement.models.Task;
+using Api.ToDoApplication.Persistence;
 
 namespace API.ListManagement.EC
 {
@@ -13,14 +14,14 @@ namespace API.ListManagement.EC
     {
         public IEnumerable<TaskDTO> Get()
         {
-            return FakeDatabase.Tasks.Select(task => new TaskDTO(task));
+            return Filebase.Current.Tasks.Select(t => new TaskDTO(t));
         }
         public TaskDTO AddOrUpdate(TaskDTO task)
         {
             if(task.Id <= 0)
             {
                 task.Id = ItemService.Current.NextId;
-                FakeDatabase.Tasks.Add(new Task(task));
+                Filebase.Current.AddOrUpdate(new Task(task));
             }
             else
             {
@@ -28,22 +29,22 @@ namespace API.ListManagement.EC
                 if(updatedTask != null)
                 {
                     var index = FakeDatabase.Tasks.IndexOf(updatedTask);
-                    FakeDatabase.Tasks.Remove(updatedTask);
-                    FakeDatabase.Tasks.Insert(index, new Task(task));
+                    Filebase.Current.Delete(updatedTask);
+                    Filebase.Current.AddOrUpdate(new Task(task));
                 }
                 else
                 {
-                    FakeDatabase.Tasks.Add(new Task(task));
+                    Filebase.Current.AddOrUpdate(new Task(task));
                 }
             }
             return task;
         }
         public TaskDTO Delete(int id)
         {
-            var taskToDelete = FakeDatabase.Tasks.FirstOrDefault(i => i.Id == id);
+            var taskToDelete = Filebase.Current.Tasks.FirstOrDefault(i => i.Id == id);
             if (taskToDelete != null)
             {
-                FakeDatabase.Tasks.Remove(taskToDelete);
+                Filebase.Current.Delete(taskToDelete);
             }
 
             return new TaskDTO(taskToDelete);
