@@ -20,14 +20,14 @@ namespace API.ListManagement.EC
             if (appointment.Id <= 0)
             {
                 appointment.Id = ItemService.Current.NextId;
-                Filebase.Current.Appointments.Add(new Appointment(appointment));
+                Filebase.Current.AddOrUpdate(new Appointment(appointment));
             }
             else
             {
-                var updatedAppointment = FakeDatabase.Appointments.FirstOrDefault(a => a.Id == appointment.Id);
+                var updatedAppointment = Filebase.Current.Appointments.FirstOrDefault(a => a.Id == appointment.Id);
                 if (updatedAppointment != null)
                 {
-                    var index = FakeDatabase.Appointments.IndexOf(updatedAppointment);
+                    var index = Filebase.Current.Appointments.IndexOf(updatedAppointment);
                     Filebase.Current.Delete(updatedAppointment);
                     Filebase.Current.AddOrUpdate(new Appointment(appointment));
                 }
